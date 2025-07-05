@@ -5,18 +5,16 @@ import * as path from 'path';
 import handlebars from 'handlebars';
 import { ConfigService } from '@nestjs/config';
 import { getNodeMailerConfig } from 'src/config/nodemailer.config';
+import { INodeMailerConfig } from './interfaces/configs.interfaces';
 
 @Injectable()
 export class EmailService {
   private transporter: nodemailer.Transporter;
+  private readonly configs: INodeMailerConfig;
 
   constructor(private readonly ConfigService: ConfigService) {
-    this.transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
-      auth: getNodeMailerConfig(this.ConfigService),
-    });
+    this.configs = getNodeMailerConfig(this.ConfigService);
+    this.transporter = nodemailer.createTransport(this.configs);
   }
 
   private compileTemplate(templateName: string, url: string): string {
@@ -36,13 +34,11 @@ export class EmailService {
   async sendMagicLinkEmail(to: string, url: string) {
     const html = this.compileTemplate('magic-link', url);
 
-    const info = await this.transporter.sendMail({
-      from: getNodeMailerConfig(this.ConfigService).user,
+    await this.transporter.sendMail({
+      from: this.configs.auth.user,
       to,
       subject: 'Your Magic Register Link',
       html,
     });
-
-    return info;
   }
 }
