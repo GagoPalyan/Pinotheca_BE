@@ -1,0 +1,38 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(uuid())
+
+  firstname   String
+  lastname    String
+
+  email       String   @unique
+  password    String   @map("password_hash")
+  likes       Picture[] @relation("picture_liked_users")
+
+  isAdmin     Boolean  @default(false) @map("is_admin")
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt      @map("updated_at")
+
+  @@map("users")
+}
+
+model Picture {
+  id  String @id @default(uuid())
+
+  likedUsers User @relation("picture_liked_users", fields: [usersId], references: [id], onDelete: Cascade)
+  usersId  String @map("user_id")
+
+  created_at DateTime @default(now()) @map("created_at")
+  updated_at DateTime @updatedAt      @map("updated_at")
+
+  @@map("pictures")
+}
