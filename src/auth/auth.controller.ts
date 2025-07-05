@@ -1,6 +1,8 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MagicLinkDto, RegisterEmailDto } from './dto/register.dto';
+import { Request, Response } from 'express';
+import { LoginDto } from './dto/login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -12,7 +14,20 @@ export class AuthController {
   }
 
   @Post('magic-link')
-  magicLink(@Body() dto: MagicLinkDto) {
-    return this.authService.magicLink(dto);
+  magicLink(
+    @Res({ passthrough: true }) res: Response,
+    @Body() dto: MagicLinkDto,
+  ) {
+    return this.authService.magicLink(res, dto);
+  }
+
+  @Post('login')
+  login(@Res({ passthrough: true }) res: Response, @Body() dto: LoginDto) {
+    return this.authService.login(res, dto);
+  }
+
+  @Post('refresh')
+  refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
+    return this.authService.refresh(req, res);
   }
 }

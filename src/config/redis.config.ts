@@ -1,9 +1,9 @@
 import type { ConfigService } from '@nestjs/config';
 import Redis from 'ioredis';
 
-export function getRedisConfig(ConfigService: ConfigService) {
+export function getRedisConfig(configService: ConfigService) {
   return new Redis({
-    host: ConfigService.getOrThrow<string>('REDIS_HOST'),
-    port: ConfigService.getOrThrow<number>('REDIS_PORT'),
+    host: configService.getOrThrow<string>('REDIS_HOST'),
+    port: configService.getOrThrow<number>('REDIS_PORT'),
   });
 }

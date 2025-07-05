@@ -1,8 +1,11 @@
 {
   "name": "pinotheca-be",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Pinotheca Online Gallery",
+  "author": {
+    "email": "gagik.palyan@gmail.com",
+    "name": "Gagik Palyan"
+  },
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -23,6 +26,7 @@
     "@nestjs/common": "^11.0.1",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
+    "@nestjs/jwt": "^11.0.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/platform-express": "^11.0.1",
     "@nestjs/terminus": "^11.0.0",
@@ -31,9 +35,11 @@
     "bcrypt": "^6.0.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
+    "cookie-parser": "^1.4.7",
     "crypto": "^1.0.1",
     "handlebars": "^4.7.8",
     "ioredis": "^5.6.1",
+    "ms": "^2.1.3",
     "nodemailer": "^7.0.4",
     "pg": "^8.16.3",
     "prisma": "^6.10.1",
@@ -50,6 +56,7 @@
     "@swc/cli": "^0.6.0",
     "@swc/core": "^1.10.7",
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.7",
