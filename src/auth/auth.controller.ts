@@ -1,8 +1,9 @@
 import { Body, Controller, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { MagicLinkDto, RegisterEmailDto } from './dto/register.dto';
 import { Request, Response } from 'express';
-import { LoginDto } from './dto/login.dto';
+import type { MagicLinkDto, RegisterEmailDto } from './dto/register.dto';
+import type { LoginDto } from './dto/login.dto';
+import type { ResetPasswordDto } from './dto/reset.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -14,10 +15,7 @@ export class AuthController {
   }
 
   @Post('magic-link')
-  magicLink(
-    @Res({ passthrough: true }) res: Response,
-    @Body() dto: MagicLinkDto,
-  ) {
+  magicLink(@Res({ passthrough: true }) res: Response, @Body() dto: MagicLinkDto) {
     return this.authService.magicLink(res, dto);
   }
 
@@ -29,5 +27,15 @@ export class AuthController {
   @Post('refresh')
   refresh(@Req() req: Request, @Res({ passthrough: true }) res: Response) {
     return this.authService.refresh(req, res);
+  }
+
+  @Post('forgot-password')
+  forgotPassword(@Body() dto: RegisterEmailDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('reset-password')
+  resetPassword(@Res({ passthrough: true }) res: Response, @Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(res, dto);
   }
 }

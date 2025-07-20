@@ -41,4 +41,15 @@ export class EmailService {
       html,
     });
   }
+
+  async sendForgotPasswordEmail(to: string, url: string) {
+    const html = this.compileTemplate('forgot-password', url);
+
+    await this.transporter.sendMail({
+      from: this.configs.auth.user,
+      to,
+      subject: 'Your Forgot Password Link',
+      html,
+    });
+  }
 }
