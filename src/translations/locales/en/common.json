@@ -1,0 +1,29 @@
+{
+  "common": {
+    "company": "Pinotheca"
+  },
+  "auth": {
+    "common": {
+      "firstname": "First Name",
+      "lastname": "Last Name",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm Password"
+    },
+    "register": {
+      "title": "Register"
+    },
+    "magic_link": {
+      "title": "Magic Link"
+    },
+    "login": {
+      "title": "Login"
+    },
+    "forgot_password": {
+      "title": "Forgot Password"
+    },
+    "change_password": {
+      "title": "Reset Password"
+    }
+  }
+}

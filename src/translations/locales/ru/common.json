@@ -1,0 +1,22 @@
+{
+  "common": {
+    "company": "Пинотека"
+  },
+  "auth": {
+    "register": {
+      "title": "Регистрация"
+    },
+    "magic_link": {
+      "title": "Магическая ссылка"
+    },
+    "login": {
+      "title": "Вход"
+    },
+    "forgot_password": {
+      "title": "Забыли пароль?"
+    },
+    "change_password": {
+      "title": "Сброс пароля"
+    }
+  }
+}
