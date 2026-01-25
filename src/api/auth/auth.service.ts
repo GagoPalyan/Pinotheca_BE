@@ -42,7 +42,10 @@ export class AuthService {
       select: { id: true },
     });
 
-    if (user) throw new ConflictException(i18n.t('backend.auth.user_already_exist'));
+    if (user)
+      throw new ConflictException(
+        i18n.t('backend.auth.user_already_exist', { args: { email: dto.email } }),
+      );
 
     const token = crypto.randomBytes(32).toString('hex');
     const hashToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -54,7 +57,10 @@ export class AuthService {
 
     this.emailService.sendMagicLinkEmail(dto.email, link);
 
-    return { message: 'Check your email. We sent you a magic link.', status: 201 };
+    return {
+      message: i18n.t('backend.auth.register', { args: { email: dto.email } }),
+      status: 201,
+    };
   }
 
   async magicLink(res: Response, dto: MagicLinkDto, i18n: I18nContext) {
@@ -109,7 +115,10 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new ConflictException(i18n.t('backend.auth.invalid_credentials'));
+    if (!user)
+      throw new ConflictException(
+        i18n.t('backend.auth.invalid_credentials', { args: { email: dto.email } }),
+      );
 
     const token = crypto.randomBytes(32).toString('hex');
     const hashToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -121,7 +130,10 @@ export class AuthService {
 
     this.emailService.sendForgotPasswordEmail(dto.email, link);
 
-    return { message: 'success' };
+    return {
+      message: i18n.t('backend.auth.forgot_password', { args: { email: dto.email } }),
+      status: 201,
+    };
   }
 
   async resetPassword(res: Response, dto: ResetPasswordDto, i18n: I18nContext) {

@@ -4,8 +4,10 @@
   },
   "auth": {
     "unauthorized": "unauthorized",
-    "user_already_exist": "User already exists",
+    "user_already_exist": "User with {email} already exists. Please login or use another email.",
     "invalid_token": "Invalid token",
-    "invalid_credentials": "Invalid credentials"
+    "invalid_credentials": "User with {email} does not exist or password is incorrect. Please try again.",
+    "register": "Check your email. We sent you a magic link to {email} to verify your email.",
+    "forgot_password": "Check your email. We sent you a magic link to {email} to reset your password."
   }
 }
