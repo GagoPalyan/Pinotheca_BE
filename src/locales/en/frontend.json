@@ -8,6 +8,9 @@
       "or": "OR",
       "google-sign-in": "Sign in With Google"
     },
+    "errors": {
+      "token": "Invalid token"
+    },
     "fields": {
       "firstname": {
         "label": "First Name",
@@ -65,17 +68,15 @@
       "register": {
         "title": "Register",
         "switch_page": {
-          "title": "Don’t have an account?",
-          "button": "Register"
+          "title": "Already have an account?",
+          "button": "Sign in"
         },
         "201": {
-          "title": "Success!",
-          "text": "Please check your email to verify your account.",
+          "title": "Thank you!",
           "button": "Go to home"
         },
         "409": {
           "title": "Oops!",
-          "text": "User already exists.",
           "button": "Try with another email"
         }
       },
@@ -85,15 +86,29 @@
       "login": {
         "title": "Login",
         "switch_page": {
-          "title": "Already have an account?",
-          "button": "Sign in"
+          "title": "Don’t have an account?",
+          "button": "Register"
         }
       },
       "forgot_password": {
-        "title": "Forgot Password"
+        "title": "Forgot Password",
+        "button": "Send",
+        "201": {
+          "title": "Thank you!",
+          "button": "Go to home"
+        },
+        "409": {
+          "title": "Oops!",
+          "button": "Try with another email"
+        },
+        "switch_page": {
+          "title": "Remembered your password?",
+          "button": "Login"
+        }
       },
-      "change_password": {
-        "title": "Reset Password"
+      "reset_password": {
+        "title": "Reset Password",
+        "button": "Reset"
       }
     }
   }
