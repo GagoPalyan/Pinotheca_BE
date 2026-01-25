@@ -1,0 +1,100 @@
+{
+  "common": {
+    "company": "Pinotheca"
+  },
+  "auth": {
+    "common": {
+      "welcome": "Welcome to Pinotheca",
+      "or": "OR",
+      "google-sign-in": "Sign in With Google"
+    },
+    "fields": {
+      "firstname": {
+        "label": "First Name",
+        "placeholder": "Enter your first name",
+        "errors": {
+          "required": "First Name is required",
+          "invalid": "First Name is invalid",
+          "min": "First Name must be at least 3 characters long",
+          "max": "First Name must be at most 32 characters long"
+        }
+      },
+      "lastname": {
+        "label": "Last Name",
+        "placeholder": "Enter your last name",
+        "errors": {
+          "required": "Last Name is required",
+          "invalid": "Last Name is invalid",
+          "min": "Last Name must be at least 3 characters long",
+          "max": "Last Name must be at most 32 characters long"
+        }
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "Enter your email",
+        "errors": {
+          "required": "Email is required",
+          "invalid": "Email is invalid",
+          "unique": "Email is already in use"
+        }
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "Enter your password",
+        "errors": {
+          "required": "Password is required",
+          "min": "Password must be at least 8 characters long",
+          "max": "Password must be at most 32 characters long",
+          "invalid": "Password must include uppercase, lowercase, number, and special character.",
+          "confirm_required": "Passwords must match",
+          "match": "Passwords do not match"
+        }
+      },
+      "confirmPassword": {
+        "label": "Confirm Password",
+        "placeholder": "Confirm your password"
+      },
+      "terms": {
+        "label": "I agree to the Terms of Service and Privacy Policy.",
+        "errors": {
+          "required": "You must agree to the Terms of Service and Privacy Policy."
+        }
+      }
+    },
+    "pages": {
+      "register": {
+        "title": "Register",
+        "switch_page": {
+          "title": "Don’t have an account?",
+          "button": "Register"
+        },
+        "201": {
+          "title": "Success!",
+          "text": "Please check your email to verify your account.",
+          "button": "Go to home"
+        },
+        "409": {
+          "title": "Oops!",
+          "text": "User already exists.",
+          "button": "Try with another email"
+        }
+      },
+      "magic_link": {
+        "title": "Magic Link"
+      },
+      "login": {
+        "title": "Login",
+        "switch_page": {
+          "title": "Already have an account?",
+          "button": "Sign in"
+        }
+      },
+      "forgot_password": {
+        "title": "Forgot Password"
+      },
+      "change_password": {
+        "title": "Reset Password"
+      }
+    }
+  }
+}

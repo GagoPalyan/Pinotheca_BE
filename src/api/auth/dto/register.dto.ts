@@ -1,4 +1,6 @@
 import {
+  Equals,
+  IsBoolean,
   IsEmail,
   IsNotEmpty,
   IsString,
@@ -48,4 +50,9 @@ export class MagicLinkDto {
   @IsNotEmpty({ message: 'Confirm password cannot be empty' })
   @Match('password', { message: 'Passwords do not match' })
   confirmPassword: string;
+
+  @IsBoolean({ message: 'Terms must be a boolean' })
+  @IsNotEmpty({ message: 'Terms cannot be empty' })
+  @Equals(true, { message: 'Terms must be accepted' })
+  terms: boolean;
 }

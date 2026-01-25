@@ -1,0 +1,22 @@
+{
+  "common": {
+    "company": "Պինոթեկան"
+  },
+  "auth": {
+    "register": {
+      "title": "Գրանցում"
+    },
+    "magic_link": {
+      "title": "Հրաշալի հղում"
+    },
+    "login": {
+      "title": "Մուտք"
+    },
+    "forgot_password": {
+      "title": "Մոռացե՞լ եք գաղտնաբառը"
+    },
+    "change_password": {
+      "title": "Գաղտնաբառի վերականգնում"
+    }
+  }
+}

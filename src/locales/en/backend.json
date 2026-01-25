@@ -1,0 +1,11 @@
+{
+  "common": {
+    "something_went_wrong": "Something went wrong"
+  },
+  "auth": {
+    "unauthorized": "unauthorized",
+    "user_already_exist": "User already exists",
+    "invalid_token": "Invalid token",
+    "invalid_credentials": "Invalid credentials"
+  }
+}

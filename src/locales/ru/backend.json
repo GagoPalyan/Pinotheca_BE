@@ -1,0 +1,11 @@
+{
+  "common": {
+    "something_went_wrong": "Что-то пошло не так"
+  },
+  "auth": {
+    "unauthorized": "неавторизован",
+    "user_already_exist": "Пользователь уже существует",
+    "invalid_token": "Недействительный токен",
+    "invalid_credentials": "Неверные учетные данные"
+  }
+}

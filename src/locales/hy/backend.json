@@ -1,0 +1,11 @@
+{
+  "common": {
+    "something_went_wrong": "Ինչ-որ բան սխալ է"
+  },
+  "auth": {
+    "unauthorized": "անվավեր",
+    "user_already_exist": "Օգտատերը արդեն գոյություն ունի",
+    "invalid_token": "Անվավեր նշան",
+    "invalid_credentials": "Անվավեր հավատարմագրեր"
+  }
+}

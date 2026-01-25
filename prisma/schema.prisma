@@ -15,12 +15,15 @@ model User {
 
   email       String   @unique
   password    String   @map("password_hash")
-  likes       Picture[] @relation("picture_liked_users")
 
   isAdmin     Boolean  @default(false) @map("is_admin")
 
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt      @map("updated_at")
+  likes       Like[]
+  followers   Follower[]
+  orders      Order[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at") 
 
   @@map("users")
 }
@@ -28,11 +31,93 @@ model User {
 model Picture {
   id  String @id @default(uuid())
 
-  likedUsers User @relation("picture_liked_users", fields: [usersId], references: [id], onDelete: Cascade)
-  usersId  String @map("user_id")
+  url         String
+  title       String
+  description String
 
-  created_at DateTime @default(now()) @map("created_at")
-  updated_at DateTime @updatedAt      @map("updated_at")
+  width       Int
+  height      Int
+
+  material   String
+  paint   String
+  type    String
+
+  price       Float
+  isSold      Boolean  @default(false) @map("is_sold")
+
+  likes       Like[]
+  orders      Order[]
+  author      Author  @relation(fields: [authorId], references: [id])
+  authorId    String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("pictures")
+}
+
+model Author {
+  id  String @id @default(uuid())
+
+  firstname   String
+  lastname    String
+
+  about       String
+  imageUrl    String  @map("image_url")
+
+  pictures Picture[]
+  followers   Follower[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("authors")
+}
+
+model Like {
+  id         String   @id @default(uuid())
+  
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+  
+  picture    Picture  @relation(fields: [pictureId], references: [id])
+  pictureId  String
+
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, pictureId])
+
+  @@map("likes")
+}
+
+model Follower {
+  id         String   @id @default(uuid())
+
+  user  User     @relation(fields: [userId], references: [id])
+  userId String
+
+  author Author @relation(fields: [authorId], references: [id])
+  authorId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, authorId])
+
+  @@map("followers")
+}
+
+model Order {
+  id         String @id @default(uuid())
+
+  user User  @relation(fields: [userId], references: [id])
+  userId String
+
+  picture Picture @relation(fields: [pictureId], references: [id])
+  pictureId String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  deletedAt DateTime @map("deleted_at")
+
+  @@map("orders")
 }
