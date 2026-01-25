@@ -25,6 +25,6 @@ export class TranslationsService {
   }
 
   private getLocaleFilePath(lang: Language): string {
-    return join(process.cwd(), 'src', 'translations', 'locales', lang, 'common.json');
+    return join(process.cwd(), 'src', 'locales', lang, 'frontend.json');
   }
 }
