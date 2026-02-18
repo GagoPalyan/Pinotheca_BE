@@ -1,6 +1,16 @@
 {
   "common": {
-    "company": "Pinotheca"
+    "company": "Pinotheca",
+    "pages": {
+      "home": "Главная",
+      "artists": "Художники",
+      "gallery": "Галерея",
+      "about-us": "О нас",
+      "contact-us": "Связаться с нами",
+      "favorites": "Избранное",
+      "cart": "Корзина",
+      "profile": "Профиль"
+    }
   },
   "auth": {
     "common": {

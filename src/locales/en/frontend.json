@@ -1,6 +1,16 @@
 {
   "common": {
-    "company": "Pinotheca"
+    "company": "Pinotheca",
+    "pages": {
+      "home": "Home",
+      "artists": "Artists",
+      "gallery": "Gallery",
+      "about-us": "About Us",
+      "contact-us": "Contact Us",
+      "favorites": "Favorites",
+      "cart": "Cart",
+      "profile": "Profile"
+    }
   },
   "auth": {
     "common": {

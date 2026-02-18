@@ -7,7 +7,6 @@ import * as crypto from 'crypto';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from 'src/common/email/email.service';
-import { IJwtPayload } from './interfaces/jwt.interfaces';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { isDev } from 'src/utils/is-dev.utils';
@@ -15,6 +14,7 @@ import { parseDuration } from 'src/utils/parse-duration.utils';
 import { getClientUrl } from 'src/utils/get-client-url.utils';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
+import { IJwtPayload } from 'src/common/interfaces';
 
 @Injectable()
 export class AuthService {
@@ -96,11 +96,17 @@ export class AuthService {
       },
     });
 
-    if (!user) throw new UnauthorizedException(i18n.t('backend.auth.invalid_credentials'));
+    if (!user)
+      throw new UnauthorizedException(
+        i18n.t('backend.auth.invalid_credentials', { args: { email: dto.email } }),
+      );
 
     const isValid = await bcrypt.compare(dto.password, user.password);
 
-    if (!isValid) throw new UnauthorizedException(i18n.t('backend.auth.invalid_credentials'));
+    if (!isValid)
+      throw new UnauthorizedException(
+        i18n.t('backend.auth.invalid_credentials', { args: { email: dto.email } }),
+      );
 
     return this.auth(res, user.id);
   }
@@ -161,15 +167,11 @@ export class AuthService {
 
     if (!refreshToken) throw new UnauthorizedException(i18n.t('backend.auth.unauthorized'));
 
-    const payload: IJwtPayload = await this.jwtService.verifyAsync<IJwtPayload>(refreshToken);
+    const payload = await this.jwtService.verifyAsync<IJwtPayload>(refreshToken);
 
     const user = await this.PrismaService.user.findUnique({
-      where: {
-        id: payload.id,
-      },
-      select: {
-        id: true,
-      },
+      where: { id: payload.id },
+      select: { id: true },
     });
 
     if (!user) throw new UnauthorizedException(i18n.t('backend.auth.unauthorized'));
@@ -177,16 +179,43 @@ export class AuthService {
     return this.auth(res, user.id);
   }
 
+  async me(req: Request, i18n: I18nContext) {
+    const { id } = req.user as IJwtPayload;
+
+    const user = await this.PrismaService.user.findUnique({
+      where: { id },
+      select: {
+        email: true,
+        firstname: true,
+        lastname: true,
+        _count: {
+          select: {
+            likes: true,
+            orders: true,
+          },
+        },
+      },
+    });
+
+    if (!user) throw new UnauthorizedException(i18n.t('backend.auth.unauthorized'));
+
+    return user;
+  }
+
+  async logout(res: Response) {
+    const cookiesList = ['accessToken', 'refreshToken'] as const;
+    cookiesList.forEach((cookie) => this.setCookie(res, cookie, '', new Date(0)));
+    return;
+  }
+
   private async auth(res: Response, id: string) {
-    const { accessToken, refreshToken } = await this.generateTokens(id);
+    const tokens = await this.generateTokens(id);
 
-    this.setCookie(
-      res,
-      refreshToken,
-      new Date(Date.now() + parseDuration(this.JWT_REFRESH_TOKEN_TTL)),
-    );
+    Object.entries(tokens).forEach(([key, value]: [keyof typeof tokens, string]) => {
+      this.setCookie(res, key, value, new Date());
+    });
 
-    return { accessToken };
+    return { accessToken: tokens.accessToken };
   }
 
   private async generateTokens(id: string) {
@@ -202,13 +231,21 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  private setCookie(res: Response, value: string, expires: Date) {
-    res.cookie('refreshToken', value, {
-      httpOnly: true,
+  private setCookie(
+    res: Response,
+    key: 'accessToken' | 'refreshToken',
+    value: string,
+    expires: Date,
+    httpOnly: boolean = true,
+  ) {
+    const staging = !isDev(this.configService);
+
+    res.cookie(key, value, {
+      httpOnly,
       domain: this.COOKIE_DOMAIN,
       expires,
-      secure: !isDev(this.configService),
-      sameSite: isDev(this.configService) ? 'lax' : 'none',
+      secure: staging,
+      sameSite: staging ? 'none' : 'lax',
     });
   }
 }
