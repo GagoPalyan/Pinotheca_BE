@@ -1,6 +1,16 @@
 {
   "common": {
-    "company": "Pinotheca"
+    "company": "Pinotheca",
+    "pages": {
+      "home": "Գլխավոր",
+      "artists": "Նկարիչներ",
+      "gallery": "Պատկերասրահ",
+      "about-us": "Մեր մասին",
+      "contact-us": "Կապ մեզ հետ",
+      "favorites": "Նախընտրածներ",
+      "cart": "Զամբյուղ",
+      "profile": "Պրոֆիլ"
+    }
   },
   "auth": {
     "common": {

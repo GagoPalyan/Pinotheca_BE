@@ -1,4 +1,4 @@
-import { IsEnum } from 'class-validator';
+import { IsEnum, IsString } from 'class-validator';
 
 export enum Language {
   EN = 'en',
@@ -7,6 +7,6 @@ export enum Language {
 }
 
 export class GetLangParamDto {
-  @IsEnum(Language, { message: 'lang must be one of: en, hy, ru' })
+  @IsString()
   lang: Language;
 }

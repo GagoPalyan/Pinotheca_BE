@@ -1,10 +1,11 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import type { MagicLinkDto, RegisterEmailDto } from './dto/register.dto';
 import type { LoginDto } from './dto/login.dto';
 import type { ResetPasswordDto } from './dto/reset.dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
+import { JwtAuthGuard } from 'src/common/guard';
 
 @Controller('auth')
 export class AuthController {
@@ -33,7 +34,7 @@ export class AuthController {
     return this.authService.login(res, dto, i18n);
   }
 
-  @Post('refresh')
+  @Get('refresh')
   refresh(
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
@@ -54,5 +55,16 @@ export class AuthController {
     @I18n() i18n: I18nContext,
   ) {
     return this.authService.resetPassword(res, dto, i18n);
+  }
+
+  @Get('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    return this.authService.logout(res);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  me(@Req() req: Request, @I18n() i18n: I18nContext) {
+    return this.authService.me(req, i18n);
   }
 }
