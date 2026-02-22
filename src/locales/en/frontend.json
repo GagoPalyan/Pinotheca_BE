@@ -9,7 +9,9 @@
       "contact-us": "Contact Us",
       "favorites": "Favorites",
       "cart": "Cart",
-      "profile": "Profile"
+      "profile": "Profile",
+      "sign-in": "Sign In",
+      "sign-out": "Sign Out"
     }
   },
   "auth": {

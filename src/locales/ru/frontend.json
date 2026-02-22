@@ -9,7 +9,9 @@
       "contact-us": "Связаться с нами",
       "favorites": "Избранное",
       "cart": "Корзина",
-      "profile": "Профиль"
+      "profile": "Профиль",
+      "sign-in": "Войти",
+      "sign-out": "Выйти"
     }
   },
   "auth": {
