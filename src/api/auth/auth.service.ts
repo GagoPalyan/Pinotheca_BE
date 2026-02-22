@@ -209,13 +209,23 @@ export class AuthService {
   }
 
   private async auth(res: Response, id: string) {
-    const tokens = await this.generateTokens(id);
+    const { accessToken, refreshToken } = await this.generateTokens(id);
 
-    Object.entries(tokens).forEach(([key, value]: [keyof typeof tokens, string]) => {
-      this.setCookie(res, key, value, new Date());
-    });
+    this.setCookie(
+      res,
+      'accessToken',
+      accessToken,
+      new Date(Date.now() + parseDuration(this.JWT_ACCESS_TOKEN_TTL)),
+      false,
+    );
+    this.setCookie(
+      res,
+      'refreshToken',
+      refreshToken,
+      new Date(Date.now() + parseDuration(this.JWT_REFRESH_TOKEN_TTL)),
+    );
 
-    return { accessToken: tokens.accessToken };
+    return { accessToken };
   }
 
   private async generateTokens(id: string) {
