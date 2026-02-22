@@ -24,6 +24,6 @@ RUN npx prisma generate
 
 COPY --from=builder /app/dist ./dist
 
-EXPOSE 8000
+EXPOSE 4000
 
 CMD ["node", "dist/main.js"]
