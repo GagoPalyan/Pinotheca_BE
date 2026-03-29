@@ -4,10 +4,20 @@
   },
   "auth": {
     "unauthorized": "unauthorized",
+    "forbidden": "You do not have permission to access this resource.",
     "user_already_exist": "User with {email} already exists. Please login or use another email.",
     "invalid_token": "Invalid token",
     "invalid_credentials": "User with {email} does not exist or password is incorrect. Please try again.",
     "register": "Check your email. We sent you a magic link to {email} to verify your email.",
     "forgot_password": "Check your email. We sent you a magic link to {email} to reset your password."
+  },
+  "authors": {
+    "not_found": "Author not found"
+  },
+  "pictures": {
+    "created": "Picture created successfully",
+    "not_found": "Picture not found",
+    "updated": "Picture updated successfully",
+    "deleted": "Picture deleted successfully"
   }
 }

@@ -1,9 +1,7 @@
 import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
-import type { MagicLinkDto, RegisterEmailDto } from './dto/register.dto';
-import type { LoginDto } from './dto/login.dto';
-import type { ResetPasswordDto } from './dto/reset.dto';
+import { MagicLinkDto, RegisterEmailDto, LoginDto, ResetPasswordDto } from './dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { JwtAuthGuard } from 'src/common/guard';
 

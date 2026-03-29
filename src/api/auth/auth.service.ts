@@ -15,6 +15,7 @@ import { getClientUrl } from 'src/utils/get-client-url.utils';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
 import { IJwtPayload } from 'src/common/interfaces';
+import { Role } from '@prisma/client';
 
 @Injectable()
 export class AuthService {
@@ -87,12 +88,11 @@ export class AuthService {
 
   async login(res: Response, dto: LoginDto, i18n: I18nContext) {
     const user = await this.PrismaService.user.findUnique({
-      where: {
-        email: dto.email,
-      },
+      where: { email: dto.email },
       select: {
         id: true,
         password: true,
+        role: true,
       },
     });
 
@@ -108,17 +108,13 @@ export class AuthService {
         i18n.t('backend.auth.invalid_credentials', { args: { email: dto.email } }),
       );
 
-    return this.auth(res, user.id);
+    return this.auth(res, user.id, user.role);
   }
 
   async forgotPassword(dto: RegisterEmailDto, i18n: I18nContext) {
     const user = await this.PrismaService.user.findUnique({
-      where: {
-        email: dto.email,
-      },
-      select: {
-        id: true,
-      },
+      where: { email: dto.email },
+      select: { id: true },
     });
 
     if (!user)
@@ -151,12 +147,8 @@ export class AuthService {
     const hashedPassword = await bcrypt.hash(dto.password, 10);
 
     await this.PrismaService.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        password: hashedPassword,
-      },
+      where: { id: userId },
+      data: { password: hashedPassword },
     });
 
     return this.auth(res, userId);
@@ -171,12 +163,12 @@ export class AuthService {
 
     const user = await this.PrismaService.user.findUnique({
       where: { id: payload.id },
-      select: { id: true },
+      select: { id: true, role: true },
     });
 
     if (!user) throw new UnauthorizedException(i18n.t('backend.auth.unauthorized'));
 
-    return this.auth(res, user.id);
+    return this.auth(res, user.id, user.role);
   }
 
   async me(req: Request, i18n: I18nContext) {
@@ -208,8 +200,8 @@ export class AuthService {
     return;
   }
 
-  private async auth(res: Response, id: string) {
-    const { accessToken, refreshToken } = await this.generateTokens(id);
+  private async auth(res: Response, id: string, role: Role = Role.USER) {
+    const { accessToken, refreshToken } = await this.generateTokens(id, role);
 
     this.setCookie(
       res,
@@ -228,8 +220,8 @@ export class AuthService {
     return { accessToken };
   }
 
-  private async generateTokens(id: string) {
-    const payload: IJwtPayload = { id };
+  private async generateTokens(id: string, role: Role) {
+    const payload: IJwtPayload = { id, role };
 
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: this.JWT_ACCESS_TOKEN_TTL,

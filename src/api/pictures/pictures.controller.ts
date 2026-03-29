@@ -1,25 +1,30 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards, Query } from '@nestjs/common';
 import { PicturesService } from './pictures.service';
-import { CreatePictureDto } from './dto/create-picture.dto';
-import { UpdatePictureDto } from './dto/update-picture.dto';
+import { JwtAuthGuard, RolesGuard } from 'src/common/guard';
+import { Roles } from 'src/common/decorator';
+import { Role } from '@prisma/client';
+import { I18n, I18nContext } from 'nestjs-i18n';
+import { CreatePictureDto, GetPictureQueryDto } from './dto';
 
 @Controller('pictures')
 export class PicturesController {
   constructor(private readonly picturesService: PicturesService) {}
 
-  @Post()
-  create(@Body() createPictureDto: CreatePictureDto) {
-    return this.picturesService.create(createPictureDto);
+  @Post('/create')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN)
+  create(@Body() createPictureDto: CreatePictureDto, @I18n() i18n: I18nContext) {
+    return this.picturesService.create(createPictureDto, i18n);
   }
 
   @Get()
-  findAll() {
-    return this.picturesService.findAll();
+  findAll(@Query() query: GetPictureQueryDto) {
+    return this.picturesService.findAll(query);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.picturesService.findOne(+id);
+    return this.picturesService.findOne(id);
   }
 
   // @Patch(':id')

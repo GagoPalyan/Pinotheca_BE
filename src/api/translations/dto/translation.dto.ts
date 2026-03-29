@@ -1,4 +1,4 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export enum Language {
   EN = 'en',
