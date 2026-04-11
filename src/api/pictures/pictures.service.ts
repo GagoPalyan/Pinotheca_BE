@@ -70,10 +70,10 @@ export class PicturesService {
     return {
       data: pictures,
       meta: {
-        total: 200,
+        total,
         page,
         limit,
-        totalPages: 20,
+        totalPages,
       },
     };
   }

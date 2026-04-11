@@ -12,6 +12,12 @@
       "profile": "Անձնական էջ",
       "sign-in": "Մուտք գործել",
       "sign-out": "Դուրս գալ"
+    },
+    "pagination": {
+      "previous": "Նախորդ",
+      "next": "Հաջորդ",
+      "page": "{page} / Էջ",
+      "go-to": "Գնալ"
     }
   },
   "auth": {

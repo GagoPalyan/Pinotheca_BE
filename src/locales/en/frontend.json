@@ -12,6 +12,12 @@
       "profile": "Profile",
       "sign-in": "Sign In",
       "sign-out": "Sign Out"
+    },
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "page": "{page} / Page",
+      "go-to": "Go to"
     }
   },
   "auth": {

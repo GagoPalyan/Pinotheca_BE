@@ -12,6 +12,12 @@
       "profile": "Профиль",
       "sign-in": "Войти",
       "sign-out": "Выйти"
+    },
+    "pagination": {
+      "previous": "Предыдущая",
+      "next": "Следующая",
+      "page": "{page} / Страница",
+      "go-to": "Перейти"
     }
   },
   "auth": {
