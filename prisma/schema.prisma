@@ -83,10 +83,10 @@ model Like {
   id         String   @id @default(uuid())
   
   user       User     @relation(fields: [userId], references: [id])
-  userId     String
+  userId     String   @map("user_id")
   
   picture    Picture  @relation(fields: [pictureId], references: [id])
-  pictureId  String
+  pictureId  String   @map("picture_id")
 
   createdAt  DateTime @default(now()) @map("created_at")
 

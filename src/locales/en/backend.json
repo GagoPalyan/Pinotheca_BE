@@ -18,6 +18,8 @@
     "created": "Picture created successfully",
     "not_found": "Picture not found",
     "updated": "Picture updated successfully",
-    "deleted": "Picture deleted successfully"
+    "deleted": "Picture deleted successfully",
+    "liked": "Picture liked successfully",
+    "unliked": "Picture unliked successfully"
   }
 }

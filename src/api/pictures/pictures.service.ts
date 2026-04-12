@@ -3,6 +3,7 @@ import { CreatePictureDto } from './dto/create-picture.dto';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
 import type { GetPictureQueryDto } from './dto';
+import type { IJwtPayload } from 'src/common/interfaces';
 
 const cardImageSelector = {
   id: true,
@@ -113,6 +114,39 @@ export class PicturesService {
         },
       },
     });
+  }
+
+  async like(id: string, user: IJwtPayload, i18n: I18nContext) {
+    const picture = await this.prismaService.picture.findUnique({
+      where: { id },
+    });
+
+    if (!picture) throw new NotFoundException(i18n.t('backend.pictures.not_found'));
+
+    const userId_pictureId = {
+      userId: user.id,
+      pictureId: id,
+    };
+
+    try {
+      await this.prismaService.like.create({
+        data: userId_pictureId,
+      });
+
+      return {
+        liked: true,
+        message: i18n.t('backend.pictures.liked'),
+      };
+    } catch (error) {
+      await this.prismaService.like.delete({
+        where: { userId_pictureId },
+      });
+
+      return {
+        liked: false,
+        message: i18n.t('backend.pictures.unliked'),
+      };
+    }
   }
 
   // update(id: number, updatePictureDto: UpdatePictureDto) {
