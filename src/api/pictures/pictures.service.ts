@@ -4,6 +4,7 @@ import { PrismaService } from 'src/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
 import type { GetPictureQueryDto } from './dto';
 import type { IJwtPayload } from 'src/common/interfaces';
+import { Request as ExpressRequest } from 'express';
 
 const cardImageSelector = {
   id: true,
@@ -12,13 +13,6 @@ const cardImageSelector = {
   price: true,
   width: true,
   height: true,
-  author: {
-    select: {
-      id: true,
-      firstname: true,
-      lastname: true,
-    },
-  },
 };
 
 @Injectable()
@@ -39,9 +33,10 @@ export class PicturesService {
     return i18n.t('backend.pictures.created');
   }
 
-  async findAll(query: GetPictureQueryDto) {
+  async findAll(req: ExpressRequest, query: GetPictureQueryDto) {
     const { search = '', page = 1, limit = 12 } = query;
     const skip = (page - 1) * limit;
+    const userId = req?.user?.id || '';
 
     const [pictures, total] = await this.prismaService.$transaction([
       this.prismaService.picture.findMany({
@@ -54,7 +49,22 @@ export class PicturesService {
         take: limit,
         skip,
         orderBy: { createdAt: 'desc' },
-        select: cardImageSelector,
+        select: {
+          ...cardImageSelector,
+          author: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+            },
+          },
+          likes: userId
+            ? {
+                where: { userId },
+                select: { id: true },
+              }
+            : false,
+        },
       }),
       this.prismaService.picture.count({
         where: {
@@ -67,9 +77,13 @@ export class PicturesService {
     ]);
 
     const totalPages = Math.ceil(total / limit);
+    const data = pictures.map(({ likes, ...picture }) => ({
+      ...picture,
+      isLiked: Boolean(likes?.length),
+    }));
 
     return {
-      data: pictures,
+      data,
       meta: {
         total,
         page,
@@ -83,13 +97,7 @@ export class PicturesService {
     return this.prismaService.picture.findUnique({
       where: { id },
       select: {
-        id: true,
-        title: true,
-        description: true,
-        imageUrl: true,
-        price: true,
-        width: true,
-        height: true,
+        ...cardImageSelector,
         author: {
           select: {
             id: true,
@@ -108,9 +116,7 @@ export class PicturesService {
         paint: true,
         type: true,
         _count: {
-          select: {
-            likes: true,
-          },
+          select: { likes: true },
         },
       },
     });

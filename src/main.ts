@@ -14,7 +14,6 @@ async function bootstrap() {
   app.enableCors(getCorsConfig(configService));
   app.useGlobalPipes(new I18nValidationPipe({ transform: true }));
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
-  console.log('ValidationPipe enabled');
 
   await app.listen(configService.get<number>('PORT') ?? 4000);
 }

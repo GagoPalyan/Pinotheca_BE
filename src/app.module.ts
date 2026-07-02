@@ -4,6 +4,9 @@ import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './services/redis/redis.module';
 import { I18nModule } from './services/i18n/i18n.module';
 import { ApiModule } from './api/api.module';
+import { type MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
+import { UserMiddleware } from './common/middlewares';
+import { AuthModule } from './api/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +17,14 @@ import { ApiModule } from './api/api.module';
     RedisModule,
     PrismaModule,
     ApiModule,
+    AuthModule,
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(UserMiddleware).forRoutes({
+      path: 'pictures',
+      method: RequestMethod.GET,
+    });
+  }
+}

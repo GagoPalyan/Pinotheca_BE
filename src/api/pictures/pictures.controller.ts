@@ -19,8 +19,8 @@ export class PicturesController {
   }
 
   @Get()
-  findAll(@Query() query: GetPictureQueryDto) {
-    return this.picturesService.findAll(query);
+  findAll(@Request() req: ExpressRequest, @Query() query: GetPictureQueryDto) {
+    return this.picturesService.findAll(req, query);
   }
 
   @Get(':id')

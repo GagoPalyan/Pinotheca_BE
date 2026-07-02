@@ -1,7 +1,12 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  type CanActivate,
+  type ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Request } from 'express';
-import { IJwtPayload } from '../interfaces';
+import type { Request } from 'express';
+import type { IJwtPayload } from '../interfaces';
 import { I18nContext } from 'nestjs-i18n';
 
 @Injectable()
