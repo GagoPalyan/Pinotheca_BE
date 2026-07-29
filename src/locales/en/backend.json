@@ -3,7 +3,7 @@
     "something_went_wrong": "Something went wrong"
   },
   "auth": {
-    "unauthorized": "unauthorized",
+    "unauthorized": "Unauthorized. Please login to access this resource.",
     "forbidden": "You do not have permission to access this resource.",
     "user_already_exist": "User with {email} already exists. Please login or use another email.",
     "invalid_token": "Invalid token",
