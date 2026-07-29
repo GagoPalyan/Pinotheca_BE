@@ -191,7 +191,13 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException(i18n.t('backend.auth.unauthorized'));
 
-    return user;
+    return {
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      likes: user._count.likes,
+      orders: user._count.orders,
+    };
   }
 
   async logout(res: Response) {
