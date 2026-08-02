@@ -5,19 +5,15 @@ import { I18nContext } from 'nestjs-i18n';
 import type { GetPictureQueryDto } from './dto';
 import type { IJwtPayload } from 'src/common/interfaces';
 import { Request as ExpressRequest } from 'express';
-
-const cardImageSelector = {
-  id: true,
-  title: true,
-  imageUrl: true,
-  price: true,
-  width: true,
-  height: true,
-};
+import { UserInfoGateway } from 'src/socket/user-info/user-info.gateway';
+import { cardImageSelector } from './constants';
 
 @Injectable()
 export class PicturesService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    private readonly prismaService: PrismaService,
+    private readonly userInfoGateway: UserInfoGateway,
+  ) {}
 
   async create(createPictureDto: CreatePictureDto, i18n: I18nContext) {
     const author = await this.prismaService.author.findUnique({
@@ -122,6 +118,15 @@ export class PicturesService {
     });
   }
 
+  private async updateCounts(userId: string) {
+    if (!userId) return;
+
+    const likesCount = await this.prismaService.like.count({
+      where: { userId },
+    });
+    this.userInfoGateway.updateUserLikeCount(userId, likesCount);
+  }
+
   async like(id: string, user: IJwtPayload, i18n: I18nContext) {
     const picture = await this.prismaService.picture.findUnique({
       where: { id },
@@ -139,6 +144,8 @@ export class PicturesService {
         data: userId_pictureId,
       });
 
+      this.updateCounts(user.id);
+
       return {
         liked: true,
         message: i18n.t('backend.pictures.liked'),
@@ -147,6 +154,8 @@ export class PicturesService {
       await this.prismaService.like.delete({
         where: { userId_pictureId },
       });
+
+      this.updateCounts(user.id);
 
       return {
         liked: false,

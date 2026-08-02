@@ -7,6 +7,7 @@ import { ApiModule } from './api/api.module';
 import { type MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/common';
 import { UserMiddleware } from './common/middlewares';
 import { AuthModule } from './api/auth/auth.module';
+import { UserInfoModule } from './socket/user-info/user-info.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from './api/auth/auth.module';
     PrismaModule,
     ApiModule,
     AuthModule,
+    UserInfoModule,
   ],
 })
 export class AppModule implements NestModule {

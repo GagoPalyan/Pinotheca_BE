@@ -8,9 +8,7 @@ import { Roles } from 'src/common/decorator';
 
 @Controller('authors')
 export class AuthorsController {
-  constructor(
-    private readonly authorsService: AuthorsService,
-  ) {}
+  constructor(private readonly authorsService: AuthorsService) {}
 
   @Get()
   getAuthors(@Query() query: TDataQuery) {
