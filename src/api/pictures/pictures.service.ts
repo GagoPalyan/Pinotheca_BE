@@ -34,6 +34,13 @@ export class PicturesService {
     const skip = (page - 1) * limit;
     const userId = req?.user?.id || '';
 
+    const dbCondition = userId
+      ? {
+          where: { userId },
+          select: { id: true },
+        }
+      : false;
+
     const [pictures, total] = await this.prismaService.$transaction([
       this.prismaService.picture.findMany({
         where: {
@@ -54,12 +61,8 @@ export class PicturesService {
               lastname: true,
             },
           },
-          likes: userId
-            ? {
-                where: { userId },
-                select: { id: true },
-              }
-            : false,
+          likes: dbCondition,
+          carts: dbCondition,
         },
       }),
       this.prismaService.picture.count({
@@ -73,9 +76,10 @@ export class PicturesService {
     ]);
 
     const totalPages = Math.ceil(total / limit);
-    const data = pictures.map(({ likes, ...picture }) => ({
+    const data = pictures.map(({ likes, carts, ...picture }) => ({
       ...picture,
       isLiked: Boolean(likes?.length),
+      isInCart: Boolean(carts?.length),
     }));
 
     return {
@@ -89,8 +93,8 @@ export class PicturesService {
     };
   }
 
-  findOne(id: string) {
-    return this.prismaService.picture.findUnique({
+  async findOne(id: string) {
+    const picture = await this.prismaService.picture.findUnique({
       where: { id },
       select: {
         ...cardImageSelector,
@@ -112,13 +116,31 @@ export class PicturesService {
         paint: true,
         type: true,
         _count: {
-          select: { likes: true },
+          select: { likes: true, carts: true },
         },
       },
     });
+
+    console.log('Picture details:', picture);
+
+    return picture;
   }
 
-  private async updateCounts(userId: string) {
+  private async findPictureById(id: string, i18n: I18nContext) {
+    const picture = await this.prismaService.picture.findUnique({
+      where: { id },
+    });
+
+    if (!picture) throw new NotFoundException(i18n.t('backend.pictures.not_found'));
+
+    return picture;
+  }
+
+  private getDbCondition(userId: string, pictureId: string) {
+    return { userId, pictureId };
+  }
+
+  private async updateLikeCounts(userId: string) {
     if (!userId) return;
 
     const likesCount = await this.prismaService.like.count({
@@ -128,23 +150,16 @@ export class PicturesService {
   }
 
   async like(id: string, user: IJwtPayload, i18n: I18nContext) {
-    const picture = await this.prismaService.picture.findUnique({
-      where: { id },
-    });
+    await this.findPictureById(id, i18n);
 
-    if (!picture) throw new NotFoundException(i18n.t('backend.pictures.not_found'));
-
-    const userId_pictureId = {
-      userId: user.id,
-      pictureId: id,
-    };
+    const userId = user.id;
 
     try {
       await this.prismaService.like.create({
-        data: userId_pictureId,
+        data: this.getDbCondition(userId, id),
       });
 
-      this.updateCounts(user.id);
+      this.updateLikeCounts(userId);
 
       return {
         liked: true,
@@ -152,14 +167,53 @@ export class PicturesService {
       };
     } catch (error) {
       await this.prismaService.like.delete({
-        where: { userId_pictureId },
+        where: { userId_pictureId: this.getDbCondition(userId, id) },
       });
 
-      this.updateCounts(user.id);
+      this.updateLikeCounts(userId);
 
       return {
         liked: false,
         message: i18n.t('backend.pictures.unliked'),
+      };
+    }
+  }
+
+  private async updateCartCounts(userId: string) {
+    if (!userId) return;
+
+    const cartCount = await this.prismaService.cart.count({
+      where: { userId },
+    });
+    this.userInfoGateway.updateUserCartCount(userId, cartCount);
+  }
+
+  async cart(id: string, user: IJwtPayload, i18n: I18nContext) {
+    await this.findPictureById(id, i18n);
+
+    const userId = user.id;
+
+    try {
+      await this.prismaService.cart.create({
+        data: this.getDbCondition(userId, id),
+      });
+
+      this.updateCartCounts(userId);
+
+      return {
+        isInCart: true,
+        message: i18n.t('backend.pictures.added_in_cart'),
+      };
+    } catch (error) {
+      await this.prismaService.cart.delete({
+        where: { userId_pictureId: this.getDbCondition(userId, id) },
+      });
+
+      this.updateCartCounts(userId);
+
+      return {
+        isInCart: false,
+        message: i18n.t('backend.pictures.removed_from_cart'),
       };
     }
   }

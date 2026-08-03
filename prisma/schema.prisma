@@ -13,65 +13,67 @@ enum Role {
 }
 
 model User {
-  id          String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  firstname   String
-  lastname    String
+  firstname String
+  lastname  String
 
-  email       String   @unique
-  password    String   @map("password_hash")
+  email    String @unique
+  password String @map("password_hash")
 
-  role        Role     @default(USER)
+  role Role @default(USER)
 
-  likes       Like[]
-  followers   Follower[]
-  orders      Order[]
+  likes     Like[]
+  followers Follower[]
+  orders    Order[]
 
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at") 
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  carts     Cart[]
 
   @@map("users")
 }
 
 model Picture {
-  id  String @id @default(uuid())
+  id String @id @default(uuid())
 
   imageUrl    String @map("image_url")
   title       String
   description String
 
-  width       Int
-  height      Int
+  width  Int
+  height Int
 
-  material   String
-  paint      String
-  type       String
+  material String
+  paint    String
+  type     String
 
-  price       Float
-  isSold      Boolean  @default(false) @map("is_sold")
+  price  Float
+  isSold Boolean @default(false) @map("is_sold")
 
-  likes       Like[]
-  orders      Order[]
-  author      Author  @relation(fields: [authorId], references: [id])
-  authorId    String
+  likes    Like[]
+  orders   Order[]
+  author   Author  @relation(fields: [authorId], references: [id])
+  authorId String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+  carts     Cart[]
 
   @@map("pictures")
 }
 
 model Author {
-  id  String @id @default(uuid())
+  id String @id @default(uuid())
 
-  firstname   String
-  lastname    String
+  firstname String
+  lastname  String
 
-  about       String
-  imageUrl    String  @map("image_url")
+  about    String
+  imageUrl String @map("image_url")
 
-  pictures Picture[]
-  followers   Follower[]
+  pictures  Picture[]
+  followers Follower[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -80,45 +82,58 @@ model Author {
 }
 
 model Like {
-  id         String   @id @default(uuid())
-  
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String   @map("user_id")
-  
-  picture    Picture  @relation(fields: [pictureId], references: [id])
-  pictureId  String   @map("picture_id")
+  id String @id @default(uuid())
 
-  createdAt  DateTime @default(now()) @map("created_at")
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  picture   Picture @relation(fields: [pictureId], references: [id])
+  pictureId String  @map("picture_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@unique([userId, pictureId])
-
   @@map("likes")
 }
 
+model Cart {
+  id String @id @default(uuid())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
+
+  picture   Picture @relation(fields: [pictureId], references: [id])
+  pictureId String  @map("picture_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, pictureId])
+  @@map("carts")
+}
+
 model Follower {
-  id String   @id @default(uuid())
+  id String @id @default(uuid())
 
-  user User     @relation(fields: [userId], references: [id])
-  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
-  author Author @relation(fields: [authorId], references: [id])
-  authorId String
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId String @map("author_id")
 
   createdAt DateTime @default(now()) @map("created_at")
 
   @@unique([userId, authorId])
-
   @@map("followers")
 }
 
 model Order {
-  id         String @id @default(uuid())
+  id String @id @default(uuid())
 
-  user User  @relation(fields: [userId], references: [id])
-  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @map("user_id")
 
-  picture Picture @relation(fields: [pictureId], references: [id])
-  pictureId String
+  picture   Picture @relation(fields: [pictureId], references: [id])
+  pictureId String  @map("picture_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

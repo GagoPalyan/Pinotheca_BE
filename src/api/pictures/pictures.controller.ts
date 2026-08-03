@@ -35,6 +35,13 @@ export class PicturesController {
     return this.picturesService.like(id, req.user, i18n);
   }
 
+  @Post('/cart/:id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.ADMIN, Role.USER)
+  cart(@Request() req: ExpressRequest, @Param('id') id: string, @I18n() i18n: I18nContext) {
+    return this.picturesService.cart(id, req.user, i18n);
+  }
+
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updatePictureDto: UpdatePictureDto) {
   //   return this.picturesService.update(+id, updatePictureDto);

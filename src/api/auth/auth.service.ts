@@ -183,7 +183,7 @@ export class AuthService {
         _count: {
           select: {
             likes: true,
-            orders: true,
+            carts: true,
           },
         },
       },
@@ -196,7 +196,7 @@ export class AuthService {
       firstname: user.firstname,
       lastname: user.lastname,
       likes: user._count.likes,
-      orders: user._count.orders,
+      carts: user._count.carts,
     };
   }
 
