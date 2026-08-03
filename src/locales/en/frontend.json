@@ -134,6 +134,10 @@
     "headline": {
       "title": "Pinotheca Gallery",
       "description": "Where Armenian Art Finds Its Home — Discover centuries of cultural heritage through masterful paintings, sculptures, and contemporary works that tell the story of our nation's artistic soul."
+    },
+    "card": {
+      "cm": "cm",
+      "info": "{}"
     }
   }
 }

@@ -84,12 +84,7 @@ export class PicturesService {
 
     return {
       data,
-      meta: {
-        total,
-        page,
-        limit,
-        totalPages,
-      },
+      meta: { total, page, limit, totalPages },
     };
   }
 
