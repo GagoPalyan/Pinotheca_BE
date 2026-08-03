@@ -1,7 +1,6 @@
 import {
   ConnectedSocket,
   OnGatewayConnection,
-  OnGatewayDisconnect,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
@@ -13,7 +12,7 @@ import { UserSocket } from './dto/socket.dto';
 @WebSocketGateway({
   namespace: '/user-info',
 })
-export class UserInfoGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class UserInfoGateway implements OnGatewayConnection {
   @WebSocketServer()
   private server: Server;
 
@@ -21,10 +20,6 @@ export class UserInfoGateway implements OnGatewayConnection, OnGatewayDisconnect
 
   async handleConnection(@ConnectedSocket() socket: UserSocket) {
     this.userInfoService.connection(socket);
-  }
-
-  handleDisconnect(@ConnectedSocket() socket: UserSocket) {
-    console.log(`User ${socket.data.userId} disconnected`);
   }
 
   updateUserLikeCount(userId: string, likes: number) {

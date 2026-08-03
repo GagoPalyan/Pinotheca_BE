@@ -8,6 +8,7 @@ import { type MiddlewareConsumer, NestModule, RequestMethod } from '@nestjs/comm
 import { UserMiddleware } from './common/middlewares';
 import { AuthModule } from './api/auth/auth.module';
 import { UserInfoModule } from './socket/user-info/user-info.module';
+import { LayoutModule } from './api/layout/layout.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { UserInfoModule } from './socket/user-info/user-info.module';
     ApiModule,
     AuthModule,
     UserInfoModule,
+    LayoutModule,
   ],
 })
 export class AppModule implements NestModule {
