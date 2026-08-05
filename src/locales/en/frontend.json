@@ -137,7 +137,32 @@
     },
     "card": {
       "cm": "cm",
-      "info": "{}"
+      "info": "{paint} on {material}"
+    },
+    "picture": {
+      "material": {
+        "canvas": "canvas",
+        "cardboard": "cardboard",
+        "paper": "paper",
+        "plywood": "plywood"
+      },
+      "paint": {
+        "oilPaint": "oil paint",
+        "acrylic": "acrylic",
+        "watercolor": "water color",
+        "gouache": "gouache",
+        "pencil": "pencil",
+        "mixedMedia": "mixed media",
+        "charcoal": "charcoal",
+        "ink": "ink"
+      },
+      "type": {
+        "vertical": "vertical",
+        "horizontal": "horizontal",
+        "square": "square",
+        "round": "round",
+        "oval": "oval"
+      }
     }
   }
 }
