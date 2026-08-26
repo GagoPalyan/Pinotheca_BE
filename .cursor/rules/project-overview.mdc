@@ -1,0 +1,29 @@
+---
+description: Pinotheca BE project overview and agent working rules
+alwaysApply: true
+---
+
+# Pinotheca Backend
+
+API for the Pinotheca art gallery (pictures, authors, auth, likes/cart, translations, layout, realtime user-info). Stack: NestJS 11, Prisma, PostgreSQL, Redis, JWT cookies, nestjs-i18n, Socket.IO, Nodemailer.
+
+## Agent rules
+
+- Follow these rules strictly. If there is no clear template, ask before inventing a new pattern.
+- **Ask first** before changing: auth/guards/middleware, Prisma schema, i18n locale JSON structure.
+- **Never** add comments in code.
+- **Never** run git commands, create commits, or touch git config. The user handles all git.
+- Default product locale: `en` (also `ru`, `hy`).
+- Tests: ignore unless the user asks.
+
+## Required env names (values never in repo)
+
+`PORT`, `NODE_ENV`, `DATABASE_URL`, `JWT_SECRET`, `JWT_ACCESS_TOKEN_TTL`, `JWT_REFRESH_TOKEN_TTL`, `COOKIE_DOMAIN`, `CLIENT_DEV_URL`, `CLIENT_PROD_URL`, `REDIS_HOST`, `REDIS_PORT`, `NODEMAILER_USER`, `NODEMAILER_PASSWORD`
+
+## Conventions
+
+- Nest HTTP exceptions + `i18n.t('backend...')` (not raw `Error` for user-facing failures).
+- Prisma `select` projections for list/detail payloads.
+- Routes: `POST /pictures/create`; actions `POST /pictures/:id/like`, `POST /pictures/:id/cart`.
+
+---

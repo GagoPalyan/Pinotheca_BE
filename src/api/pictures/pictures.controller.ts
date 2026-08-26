@@ -28,14 +28,14 @@ export class PicturesController {
     return this.picturesService.findOne(id);
   }
 
-  @Post('/like/:id')
+  @Post(':id/like')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.USER)
   like(@Request() req: ExpressRequest, @Param('id') id: string, @I18n() i18n: I18nContext) {
     return this.picturesService.like(id, req.user, i18n);
   }
 
-  @Post('/cart/:id')
+  @Post(':id/cart')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.USER)
   cart(@Request() req: ExpressRequest, @Param('id') id: string, @I18n() i18n: I18nContext) {

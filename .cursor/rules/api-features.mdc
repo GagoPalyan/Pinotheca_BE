@@ -1,0 +1,44 @@
+---
+description: BE feature modules, routes, auth, Prisma, sockets
+alwaysApply: true
+---
+
+# API features
+
+## New feature shape
+
+Under `src/api/<feature>/`:
+
+```
+<feature>/
+├── <feature>.module.ts
+├── <feature>.controller.ts
+├── <feature>.service.ts
+├── dto/
+└── constants/    # when shared selectors/helpers exist
+```
+
+Controller → Service → `PrismaService` (no repository layer required).
+
+## Routes
+
+- Resource actions use id in the path: `POST /pictures/:id/like`, `POST /pictures/:id/cart`.
+- Keep **create** action style: `POST /pictures/create`, `POST /authors/create`.
+- No global `/api` prefix unless explicitly decided later.
+
+## Auth
+
+- Endpoints are **public by default**.
+- Add `@UseGuards(JwtAuthGuard)` and `@Roles(...)` + `RolesGuard` when needed.
+- Optional authenticated user on public reads: middleware pattern (as on `GET /pictures`) when `isLiked`/`isInCart`-style fields are required.
+
+## Errors & i18n
+
+Always throw Nest HTTP exceptions (`NotFoundException`, `ConflictException`, …) with `i18n.t('backend....')`. Do not throw raw `Error` for user-facing failures.
+
+## Prisma / performance
+
+- Always `select` only needed fields (see `CARD_IMAGE_SELECTOR` pattern).
+- Keep Socket.IO user-info gateway extensible for more realtime events beyond like/cart counts.
+
+---
