@@ -6,7 +6,7 @@ import type { GetPictureQueryDto } from './dto';
 import type { IJwtPayload } from 'src/common/interfaces';
 import { Request as ExpressRequest } from 'express';
 import { UserInfoGateway } from 'src/socket/user-info/user-info.gateway';
-import { cardImageSelector } from './constants';
+import { CARD_IMAGE_SELECTOR } from './constants';
 
 @Injectable()
 export class PicturesService {
@@ -53,7 +53,7 @@ export class PicturesService {
         skip,
         orderBy: { createdAt: 'desc' },
         select: {
-          ...cardImageSelector,
+          ...CARD_IMAGE_SELECTOR,
           author: {
             select: {
               id: true,
@@ -92,7 +92,7 @@ export class PicturesService {
     const picture = await this.prismaService.picture.findUnique({
       where: { id },
       select: {
-        ...cardImageSelector,
+        ...CARD_IMAGE_SELECTOR,
         author: {
           select: {
             id: true,
@@ -102,7 +102,7 @@ export class PicturesService {
             pictures: {
               where: { isSold: false, id: { not: id } },
               take: 3,
-              select: cardImageSelector,
+              select: CARD_IMAGE_SELECTOR,
             },
           },
         },

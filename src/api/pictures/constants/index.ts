@@ -1,4 +1,4 @@
-const cardImageSelector = {
+const CARD_IMAGE_SELECTOR = {
   id: true,
   title: true,
   imageUrl: true,
@@ -11,4 +11,4 @@ const cardImageSelector = {
   paint: true,
 } as const;
 
-export { cardImageSelector };
+export { CARD_IMAGE_SELECTOR };
