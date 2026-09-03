@@ -1,4 +1,4 @@
-export interface INodeMailerConfig {
+interface INodeMailerConfig {
   host: string;
   port: number;
   secure: boolean;
@@ -7,3 +7,5 @@ export interface INodeMailerConfig {
     pass: string;
   };
 }
+
+export type { INodeMailerConfig };

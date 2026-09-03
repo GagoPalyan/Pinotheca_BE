@@ -135,6 +135,36 @@
       "title": "Pinotheca Gallery",
       "description": "Where Armenian Art Finds Its Home — Discover centuries of cultural heritage through masterful paintings, sculptures, and contemporary works that tell the story of our nation's artistic soul."
     },
+    "filters": {
+      "title": "Filters",
+      "clear": "Clear",
+      "clearAll": "Clear All",
+      "material": "Material",
+      "paint": "Paint",
+      "type": "Type",
+      "price": "Price",
+      "size": "Size",
+      "apply": "Apply",
+      "min": "Min",
+      "max": "Max",
+      "width": "Width",
+      "height": "Height",
+      "widthMin": "Width min",
+      "widthMax": "Width max",
+      "heightMin": "Height min",
+      "heightMax": "Height max",
+      "chip": {
+        "price": "Price: {min}–{max}",
+        "priceMin": "Price: min {value}",
+        "priceMax": "Price: max {value}",
+        "width": "W: {min}–{max}",
+        "widthMin": "W: min {value}",
+        "widthMax": "W: max {value}",
+        "height": "H: {min}–{max}",
+        "heightMin": "H: min {value}",
+        "heightMax": "H: max {value}"
+      }
+    },
     "card": {
       "cm": "cm",
       "info": "{paint} on {material}"

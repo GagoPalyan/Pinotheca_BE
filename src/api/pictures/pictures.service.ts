@@ -7,6 +7,7 @@ import type { IJwtPayload } from 'src/common/interfaces';
 import { Request as ExpressRequest } from 'express';
 import { UserInfoGateway } from 'src/socket/user-info/user-info.gateway';
 import { CARD_IMAGE_SELECTOR } from './constants';
+import { SortEnum } from './enums';
 
 @Injectable()
 export class PicturesService {
@@ -30,7 +31,21 @@ export class PicturesService {
   }
 
   async findAll(req: ExpressRequest, query: GetPictureQueryDto) {
-    const { search = '', page = 1, limit = 12 } = query;
+    const {
+      search,
+      page = 1,
+      limit = 12,
+      material,
+      paint,
+      type,
+      priceMin,
+      priceMax,
+      widthMin,
+      widthMax,
+      heightMin,
+      heightMax,
+      sort = SortEnum.DESC,
+    } = query;
     const skip = (page - 1) * limit;
     const userId = req?.user?.id || '';
 
@@ -41,17 +56,42 @@ export class PicturesService {
         }
       : false;
 
-    const [pictures, total] = await this.prismaService.$transaction([
-      this.prismaService.picture.findMany({
-        where: {
-          title: {
-            contains: search,
-            mode: 'insensitive',
-          },
+    const where = {
+      ...(search && {
+        title: {
+          contains: search,
+          mode: 'insensitive' as const,
         },
+      }),
+      ...(material?.length && { material: { in: material } }),
+      ...(paint?.length && { paint: { in: paint } }),
+      ...(type?.length && { type: { in: type } }),
+      ...((priceMin !== undefined || priceMax !== undefined) && {
+        price: {
+          ...(priceMin !== undefined && { gte: priceMin }),
+          ...(priceMax !== undefined && { lte: priceMax }),
+        },
+      }),
+      ...((widthMin !== undefined || widthMax !== undefined) && {
+        width: {
+          ...(widthMin !== undefined && { gte: widthMin }),
+          ...(widthMax !== undefined && { lte: widthMax }),
+        },
+      }),
+      ...((heightMin !== undefined || heightMax !== undefined) && {
+        height: {
+          ...(heightMin !== undefined && { gte: heightMin }),
+          ...(heightMax !== undefined && { lte: heightMax }),
+        },
+      }),
+    };
+
+    const [pictures, total, priceBounds] = await this.prismaService.$transaction([
+      this.prismaService.picture.findMany({
+        where,
         take: limit,
         skip,
-        orderBy: { createdAt: 'desc' },
+        orderBy: { createdAt: sort },
         select: {
           ...CARD_IMAGE_SELECTOR,
           author: {
@@ -65,13 +105,10 @@ export class PicturesService {
           carts: dbCondition,
         },
       }),
-      this.prismaService.picture.count({
-        where: {
-          title: {
-            contains: search,
-            mode: 'insensitive',
-          },
-        },
+      this.prismaService.picture.count({ where }),
+      this.prismaService.picture.aggregate({
+        _min: { price: true },
+        _max: { price: true },
       }),
     ]);
 
@@ -84,7 +121,14 @@ export class PicturesService {
 
     return {
       data,
-      meta: { total, page, limit, totalPages },
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        minPrice: priceBounds._min.price ?? 0,
+        maxPrice: priceBounds._max.price ?? 0,
+      },
     };
   }
 

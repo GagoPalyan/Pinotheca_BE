@@ -1,12 +1,14 @@
 import { IsString } from 'class-validator';
 
-export enum Language {
+enum Language {
   EN = 'en',
   HY = 'hy',
   RU = 'ru',
 }
 
-export class GetLangParamDto {
+class GetLangParamDto {
   @IsString()
   lang: Language;
 }
+
+export { Language, GetLangParamDto };

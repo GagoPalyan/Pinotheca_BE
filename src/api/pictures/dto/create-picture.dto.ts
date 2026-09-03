@@ -1,30 +1,5 @@
 import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-
-export enum MaterialEnum {
-  canvas = 'canvas',
-  cardboard = 'cardboard',
-  paper = 'paper',
-  plywood = 'plywood',
-}
-
-export enum PaintEnum {
-  oilPaint = 'oil paint',
-  acrylic = 'acrylic',
-  watercolor = 'water color',
-  gouache = 'gouache',
-  pencil = 'pencil',
-  mixedMedia = 'mixed media',
-  charcoal = 'charcoal',
-  ink = 'ink',
-}
-
-export enum TypeEnum {
-  vertical = 'vertical',
-  horizontal = 'horizontal',
-  square = 'square',
-  round = 'round',
-  oval = 'oval',
-}
+import { MaterialEnum, PaintEnum, TypeEnum } from '../enums';
 
 export class CreatePictureDto {
   @IsString()

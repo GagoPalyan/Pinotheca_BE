@@ -41,4 +41,28 @@ Always throw Nest HTTP exceptions (`NotFoundException`, `ConflictException`, …
 - Always `select` only needed fields (see `CARD_IMAGE_SELECTOR` pattern).
 - Keep Socket.IO user-info gateway extensible for more realtime events beyond like/cart counts.
 
+## Named exports
+
+- For enums, types, interfaces, and constants: declare first, then export at the **end** of the file.
+- Do **not** use inline `export enum` / `export type` / `export interface` / `export const`.
+- Re-export types with the `type` keyword in the export list.
+
+```ts
+// ✅
+enum MaterialEnum {
+  canvas = 'canvas',
+}
+type TFilterOption = {
+  value: string;
+};
+export { MaterialEnum, type TFilterOption };
+
+// ❌
+export enum MaterialEnum {
+  canvas = 'canvas',
+}
+```
+
+- NestJS `class` modules/controllers/services/DTOs may keep `export class` (framework convention).
+
 ---
