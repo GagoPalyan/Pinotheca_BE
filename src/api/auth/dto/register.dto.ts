@@ -14,21 +14,21 @@ export class RegisterEmailDto {
   @IsString({ message: 'Email must be a string' })
   @IsNotEmpty({ message: 'Email cannot be empty' })
   @IsEmail({}, { message: 'Invalid email format' })
-  email: string;
+  email!: string;
 }
 
 export class MagicLinkDto {
   @IsString({ message: 'Token must be a string' })
   @IsNotEmpty({ message: 'Token cannot be empty' })
-  token: string;
+  token!: string;
 
   @IsString({ message: 'Firstname must be a string' })
   @IsNotEmpty({ message: 'Firstname cannot be empty' })
-  firstname: string;
+  firstname!: string;
 
   @IsString({ message: 'Lastname must be a string' })
   @IsNotEmpty({ message: 'Lastname cannot be empty' })
-  lastname: string;
+  lastname!: string;
 
   @IsString({ message: 'Password must be a string' })
   @IsNotEmpty({ message: 'Password cannot be empty' })
@@ -44,15 +44,15 @@ export class MagicLinkDto {
     },
     { message: 'Password must meet complexity requirements' },
   )
-  password: string;
+  password!: string;
 
   @IsString({ message: 'Confirm password must be a string' })
   @IsNotEmpty({ message: 'Confirm password cannot be empty' })
   @Match('password', { message: 'Passwords do not match' })
-  confirmPassword: string;
+  confirmPassword!: string;
 
   @IsBoolean({ message: 'Terms must be a boolean' })
   @IsNotEmpty({ message: 'Terms cannot be empty' })
   @Equals(true, { message: 'Terms must be accepted' })
-  terms: boolean;
+  terms!: boolean;
 }

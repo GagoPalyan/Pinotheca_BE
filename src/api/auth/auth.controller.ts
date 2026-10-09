@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { MagicLinkDto, RegisterEmailDto, LoginDto, ResetPasswordDto } from './dto';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { JwtAuthGuard } from 'src/common/guard';
+import { JwtAuthGuard } from '@/common/guard';
 
 @Controller('auth')
 export class AuthController {

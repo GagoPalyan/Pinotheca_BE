@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { AuthorsService } from './authors.service';
 import { CreateAuthorDto } from './dto/create-author.dto';
-import type { TDataQuery } from 'src/types/global.type';
-import { JwtAuthGuard, RolesGuard } from 'src/common/guard';
+import type { TDataQuery } from '@/types/global.type';
+import { JwtAuthGuard, RolesGuard } from '@/common/guard';
 import { Role } from '@prisma/client';
-import { Roles } from 'src/common/decorator';
+import { Roles } from '@/common/decorator';
 
 @Controller('authors')
 export class AuthorsController {

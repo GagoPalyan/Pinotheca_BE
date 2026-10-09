@@ -4,7 +4,7 @@ import { Match } from '../decorators/match.decorator';
 export class ResetPasswordDto {
   @IsString({ message: 'Token must be a string' })
   @IsNotEmpty({ message: 'Token cannot be empty' })
-  token: string;
+  token!: string;
 
   @IsString({ message: 'Password must be a string' })
   @IsNotEmpty({ message: 'Password cannot be empty' })
@@ -20,10 +20,10 @@ export class ResetPasswordDto {
     },
     { message: 'Password must meet complexity requirements' },
   )
-  password: string;
+  password!: string;
 
   @IsString({ message: 'Confirm password must be a string' })
   @IsNotEmpty({ message: 'Confirm password cannot be empty' })
   @Match('password', { message: 'Passwords do not match' })
-  confirmPassword: string;
+  confirmPassword!: string;
 }

@@ -11,7 +11,7 @@ export class LoginDto {
   @IsString({ message: 'Email must be a string' })
   @IsNotEmpty({ message: 'Email cannot be empty' })
   @IsEmail({}, { message: 'Invalid email format' })
-  email: string;
+  email!: string;
 
   @IsString({ message: 'Password must be a string' })
   @IsNotEmpty({ message: 'Password cannot be empty' })
@@ -27,5 +27,5 @@ export class LoginDto {
     },
     { message: 'Password must meet complexity requirements' },
   )
-  password: string;
+  password!: string;
 }

@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Request } from 'express';
 import { I18nContext } from 'nestjs-i18n';
-import { IJwtPayload } from 'src/common/interfaces';
-import { PrismaService } from 'src/services/prisma/prisma.service';
+import { IJwtPayload } from '@/common/interfaces';
+import { PrismaService } from '@/services/prisma/prisma.service';
 
 @Injectable()
 export class LayoutService {

@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import handlebars from 'handlebars';
 import { ConfigService } from '@nestjs/config';
-import { getNodeMailerConfig } from 'src/config/nodemailer.config';
+import { getNodeMailerConfig } from '@/config/nodemailer.config';
 import { INodeMailerConfig } from './interfaces/configs.interfaces';
 
 @Injectable()

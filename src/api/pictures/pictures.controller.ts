@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, UseGuards, Query, Request } from '@nestjs/common';
 import { PicturesService } from './pictures.service';
-import { JwtAuthGuard, RolesGuard } from 'src/common/guard';
-import { Roles } from 'src/common/decorator';
+import { JwtAuthGuard, RolesGuard } from '@/common/guard';
+import { Roles } from '@/common/decorator';
 import { Role } from '@prisma/client';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { CreatePictureDto, GetPictureQueryDto } from './dto';
@@ -11,7 +11,7 @@ import type { Request as ExpressRequest } from 'express';
 export class PicturesController {
   constructor(private readonly picturesService: PicturesService) {}
 
-  @Post('/create')
+  @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN)
   create(@Body() createPictureDto: CreatePictureDto, @I18n() i18n: I18nContext) {

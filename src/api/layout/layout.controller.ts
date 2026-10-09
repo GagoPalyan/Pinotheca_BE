@@ -1,7 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { LayoutService } from './layout.service';
 import { I18n, I18nContext } from 'nestjs-i18n';
-import { JwtAuthGuard } from 'src/common/guard';
+import { JwtAuthGuard } from '@/common/guard';
 import { Request } from 'express';
 
 @Controller('layout')

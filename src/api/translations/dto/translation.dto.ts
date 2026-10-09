@@ -8,7 +8,7 @@ enum Language {
 
 class GetLangParamDto {
   @IsString()
-  lang: Language;
+  lang!: Language;
 }
 
 export { Language, GetLangParamDto };

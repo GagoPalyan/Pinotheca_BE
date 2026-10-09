@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser';
 import { getCorsConfig } from './config/cors.config';
 import { ConfigService } from '@nestjs/config';
 import { I18nValidationPipe } from 'nestjs-i18n';

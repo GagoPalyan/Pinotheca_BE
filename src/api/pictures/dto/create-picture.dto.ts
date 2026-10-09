@@ -1,52 +1,62 @@
-import { IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { MaterialEnum, PaintEnum, TypeEnum } from '../enums';
 
 export class CreatePictureDto {
   @IsString()
   @IsNotEmpty()
-  imageUrl: string;
+  imageUrl!: string;
 
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
 
   @IsNumber()
   @IsNotEmpty()
-  width: number;
+  width!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  height: number;
+  height!: number;
 
   @IsString()
   @IsNotEmpty()
-  material: MaterialEnum;
+  @IsEnum(MaterialEnum)
+  material!: MaterialEnum;
 
   @IsString()
   @IsNotEmpty()
-  paint: PaintEnum;
+  @IsEnum(PaintEnum)
+  paint!: PaintEnum;
 
   @IsString()
   @IsNotEmpty()
-  type: TypeEnum;
+  @IsEnum(TypeEnum)
+  type!: TypeEnum;
 
   @IsNumber()
   @IsNotEmpty()
-  price: number;
+  price!: number;
 
   @IsNumber()
   @IsNotEmpty()
-  year: number;
+  year!: number;
 
   @IsOptional()
   @IsBoolean()
-  isSold: boolean;
+  isSold!: boolean;
 
   @IsString()
   @IsNotEmpty()
-  authorId: string;
+  authorId!: string;
 }

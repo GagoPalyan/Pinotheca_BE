@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAuthorDto } from './dto/create-author.dto';
-import type { TDataQuery } from 'src/types/global.type';
-import { PrismaService } from 'src/services/prisma/prisma.service';
+import type { TDataQuery } from '@/types/global.type';
+import { PrismaService } from '@/services/prisma/prisma.service';
 
 @Injectable()
 export class AuthorsService {

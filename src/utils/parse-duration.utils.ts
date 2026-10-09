@@ -1,4 +1,4 @@
-import * as ms from 'ms';
+import ms from 'ms';
 
 export function parseDuration(duration: string) {
   return ms(duration);

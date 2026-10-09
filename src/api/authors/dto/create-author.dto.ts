@@ -3,17 +3,17 @@ import { IsNotEmpty, IsString } from 'class-validator';
 export class CreateAuthorDto {
   @IsString()
   @IsNotEmpty()
-  firstname: string;
+  firstname!: string;
 
   @IsString()
   @IsNotEmpty()
-  lastname: string;
+  lastname!: string;
 
   @IsString()
   @IsNotEmpty()
-  about: string;
+  about!: string;
 
   @IsString()
   @IsNotEmpty()
-  imageUrl: string;
+  imageUrl!: string;
 }

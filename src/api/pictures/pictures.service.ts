@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePictureDto } from './dto/create-picture.dto';
-import { PrismaService } from 'src/services/prisma/prisma.service';
+import { PrismaService } from '@/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
 import type { GetPictureQueryDto } from './dto';
-import type { IJwtPayload } from 'src/common/interfaces';
+import type { IJwtPayload } from '@/common/interfaces';
 import { Request as ExpressRequest } from 'express';
-import { UserInfoGateway } from 'src/socket/user-info/user-info.gateway';
+import { UserInfoGateway } from '@/socket/user-info/user-info.gateway';
 import { CARD_IMAGE_SELECTOR } from './constants';
 import { SortEnum } from './enums';
 import { checkArrayFilter, checkRangeFilter } from './utils/helpers';

@@ -3,18 +3,18 @@ import type { MagicLinkDto, RegisterEmailDto } from './dto/register.dto';
 import type { ResetPasswordDto } from './dto/reset.dto';
 import type { LoginDto } from './dto/login.dto';
 import type Redis from 'ioredis';
-import * as crypto from 'crypto';
-import * as bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
-import { EmailService } from 'src/common/email/email.service';
+import { EmailService } from '@/common/email/email.service';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response } from 'express';
-import { isDev } from 'src/utils/is-dev.utils';
-import { parseDuration } from 'src/utils/parse-duration.utils';
-import { getClientUrl } from 'src/utils/get-client-url.utils';
-import { PrismaService } from 'src/services/prisma/prisma.service';
+import { isDev } from '@/utils/is-dev.utils';
+import { parseDuration } from '@/utils/parse-duration.utils';
+import { getClientUrl } from '@/utils/get-client-url.utils';
+import { PrismaService } from '@/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
-import { IJwtPayload } from 'src/common/interfaces';
+import { IJwtPayload } from '@/common/interfaces';
 import { Role } from '@prisma/client';
 
 @Injectable()
