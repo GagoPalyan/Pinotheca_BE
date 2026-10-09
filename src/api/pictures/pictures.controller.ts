@@ -24,8 +24,8 @@ export class PicturesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.picturesService.findOne(id);
+  findOne(@Param('id') id: string, @Request() req: ExpressRequest, @I18n() i18n: I18nContext) {
+    return this.picturesService.findOne(id, req, i18n);
   }
 
   @Post(':id/like')
@@ -42,13 +42,8 @@ export class PicturesController {
     return this.picturesService.cart(id, req.user, i18n);
   }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updatePictureDto: UpdatePictureDto) {
-  //   return this.picturesService.update(+id, updatePictureDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.picturesService.remove(+id);
-  // }
+  @Post(':id/share')
+  share(@Param('id') id: string, @I18n() i18n: I18nContext) {
+    return this.picturesService.share(id, i18n);
+  }
 }

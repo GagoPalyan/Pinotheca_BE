@@ -26,9 +26,15 @@ import { LayoutModule } from './api/layout/layout.module';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(UserMiddleware).forRoutes({
-      path: 'pictures',
-      method: RequestMethod.GET,
-    });
+    consumer.apply(UserMiddleware).forRoutes(
+      {
+        path: 'pictures',
+        method: RequestMethod.GET,
+      },
+      {
+        path: 'pictures/:id',
+        method: RequestMethod.GET,
+      },
+    );
   }
 }

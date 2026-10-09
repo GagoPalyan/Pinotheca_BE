@@ -22,6 +22,7 @@
     "liked": "Picture liked successfully",
     "unliked": "Picture unliked successfully",
     "added_in_cart": "Picture added to cart successfully",
-    "removed_from_cart": "Picture removed from cart successfully"
+    "removed_from_cart": "Picture removed from cart successfully",
+    "shared": "Picture shared successfully"
   }
 }

@@ -49,7 +49,10 @@ model Picture {
   type     String
 
   price  Float
+  year   Int
   isSold Boolean @default(false) @map("is_sold")
+
+  sharesCount Int @default(0) @map("shares_count")
 
   likes    Like[]
   orders   Order[]

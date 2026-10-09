@@ -194,5 +194,62 @@
         "oval": "oval"
       }
     }
+  },
+  "picture": {
+    "zoom": "Zoom",
+    "viewFullSize": "View Full Size",
+    "likes": "likes",
+    "shares": "shares",
+    "medium": "Medium",
+    "size": "Size",
+    "year": "Year created",
+    "buy": "Buy this artwork",
+    "inCart": "In cart",
+    "sold": "Sold",
+    "share": "Share this artwork",
+    "moreFromArtist": "More from this artist",
+    "tabs": {
+      "about": "About the artwork",
+      "dimensions": "Details and dimensions"
+    },
+    "dimensions": {
+      "width": "Width",
+      "height": "Height",
+      "type": "Type"
+    },
+    "contact": {
+      "prompt": "Need more information?",
+      "link": "Contact Us"
+    },
+    "shipping": {
+      "title": "Shipping",
+      "description": "Free shipping to most European countries and the United States.",
+      "deliveryTitle": "Less than 30 days",
+      "deliveryText": "Estimated delivery time for most destinations.",
+      "packagingTitle": "Secure packaging",
+      "packagingText": "Professionally packed to ensure safe delivery."
+    },
+    "payment": {
+      "title": "Secure Payment"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "original": {
+        "question": "Is this artwork original?",
+        "answer": "Yes. Every artwork listed on Pinotheca is an authentic original created by the artist."
+      },
+      "purchase": {
+        "question": "How can I purchase this artwork?",
+        "answer": "Add the artwork to your cart and complete checkout. Our team will confirm the order and arrange shipping."
+      },
+      "details": {
+        "question": "What if I need more details about the artwork?",
+        "answer": "Contact us and we will gladly provide additional information about the piece or the artist."
+      },
+      "returns": {
+        "question": "Are returns or exchanges possible?",
+        "answer": "Please contact our support team to discuss return or exchange options for your order."
+      }
+    }
   }
 }

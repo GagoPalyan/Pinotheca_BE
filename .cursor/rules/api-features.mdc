@@ -20,6 +20,12 @@ Under `src/api/<feature>/`:
 
 Controller → Service → `PrismaService` (no repository layer required).
 
+## Where types live
+
+- **Never** declare `type` / `interface` / `enum` in `constants/` or util helper files.
+- Put them in `dto/`, a feature `types` module, or next to the service/controller when private.
+- `constants/` may **import** types; they must not define them.
+
 ## Routes
 
 - Resource actions use id in the path: `POST /pictures/:id/like`, `POST /pictures/:id/cart`.

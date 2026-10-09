@@ -38,6 +38,10 @@ export class CreatePictureDto {
   @IsNotEmpty()
   price: number;
 
+  @IsNumber()
+  @IsNotEmpty()
+  year: number;
+
   @IsOptional()
   @IsBoolean()
   isSold: boolean;

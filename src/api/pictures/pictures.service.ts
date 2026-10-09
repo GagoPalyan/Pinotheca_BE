@@ -8,6 +8,7 @@ import { Request as ExpressRequest } from 'express';
 import { UserInfoGateway } from 'src/socket/user-info/user-info.gateway';
 import { CARD_IMAGE_SELECTOR } from './constants';
 import { SortEnum } from './enums';
+import { checkArrayFilter, checkRangeFilter } from './utils/helpers';
 
 @Injectable()
 export class PicturesService {
@@ -63,30 +64,15 @@ export class PicturesService {
           mode: 'insensitive' as const,
         },
       }),
-      ...(material?.length && { material: { in: material } }),
-      ...(paint?.length && { paint: { in: paint } }),
-      ...(type?.length && { type: { in: type } }),
-      ...((priceMin !== undefined || priceMax !== undefined) && {
-        price: {
-          ...(priceMin !== undefined && { gte: priceMin }),
-          ...(priceMax !== undefined && { lte: priceMax }),
-        },
-      }),
-      ...((widthMin !== undefined || widthMax !== undefined) && {
-        width: {
-          ...(widthMin !== undefined && { gte: widthMin }),
-          ...(widthMax !== undefined && { lte: widthMax }),
-        },
-      }),
-      ...((heightMin !== undefined || heightMax !== undefined) && {
-        height: {
-          ...(heightMin !== undefined && { gte: heightMin }),
-          ...(heightMax !== undefined && { lte: heightMax }),
-        },
-      }),
+      ...checkArrayFilter('material', material),
+      ...checkArrayFilter('paint', paint),
+      ...checkArrayFilter('type', type),
+      ...checkRangeFilter('price', priceMin, priceMax),
+      ...checkRangeFilter('width', widthMin, widthMax),
+      ...checkRangeFilter('height', heightMin, heightMax),
     };
 
-    const [pictures, total, priceBounds] = await this.prismaService.$transaction([
+    const [pictures, total, priceBounds] = await Promise.all([
       this.prismaService.picture.findMany({
         where,
         take: limit,
@@ -132,11 +118,23 @@ export class PicturesService {
     };
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, req: ExpressRequest, i18n: I18nContext) {
+    const userId = req?.user?.id || '';
+
+    const dbCondition = userId
+      ? {
+          where: { userId },
+          select: { id: true },
+        }
+      : false;
+
     const picture = await this.prismaService.picture.findUnique({
       where: { id },
       select: {
         ...CARD_IMAGE_SELECTOR,
+        description: true,
+        year: true,
+        sharesCount: true,
         author: {
           select: {
             id: true,
@@ -145,24 +143,58 @@ export class PicturesService {
             imageUrl: true,
             pictures: {
               where: { isSold: false, id: { not: id } },
-              take: 3,
+              take: 8,
               select: CARD_IMAGE_SELECTOR,
             },
           },
         },
-        isSold: true,
-        material: true,
-        paint: true,
-        type: true,
+        likes: dbCondition,
+        carts: dbCondition,
         _count: {
-          select: { likes: true, carts: true },
+          select: { likes: true },
         },
       },
     });
 
-    console.log('Picture details:', picture);
+    if (!picture) throw new NotFoundException(i18n.t('backend.pictures.not_found'));
 
-    return picture;
+    const { likes, carts, author, _count, ...rest } = picture;
+    const authorCard = {
+      id: author.id,
+      firstname: author.firstname,
+      lastname: author.lastname,
+    };
+
+    return {
+      ...rest,
+      isLiked: Boolean(likes?.length),
+      isInCart: Boolean(carts?.length),
+      likesCount: _count.likes,
+      author: {
+        ...author,
+        pictures: author.pictures.map((related) => ({
+          ...related,
+          author: authorCard,
+          isLiked: false,
+          isInCart: false,
+        })),
+      },
+    };
+  }
+
+  async share(id: string, i18n: I18nContext) {
+    await this.findPictureById(id, i18n);
+
+    const picture = await this.prismaService.picture.update({
+      where: { id },
+      data: { sharesCount: { increment: 1 } },
+      select: { sharesCount: true },
+    });
+
+    return {
+      sharesCount: picture.sharesCount,
+      message: i18n.t('backend.pictures.shared'),
+    };
   }
 
   private async findPictureById(id: string, i18n: I18nContext) {
@@ -256,12 +288,4 @@ export class PicturesService {
       };
     }
   }
-
-  // update(id: number, updatePictureDto: UpdatePictureDto) {
-  //   return `This action updates a #${id} picture`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} picture`;
-  // }
 }
