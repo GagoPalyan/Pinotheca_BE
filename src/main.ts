@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import cookieParser from 'cookie-parser';
 import { getCorsConfig } from './config/cors.config';
@@ -10,6 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
 
+  app.use(helmet());
   app.use(cookieParser());
   app.enableCors(getCorsConfig(configService));
   app.useGlobalPipes(new I18nValidationPipe({ transform: true }));
