@@ -15,6 +15,7 @@ export class LayoutService {
       where: { id },
       select: {
         firstname: true,
+        imageUrl: true,
         _count: {
           select: {
             likes: true,
@@ -30,6 +31,7 @@ export class LayoutService {
 
     return {
       nameFirstLater,
+      imageUrl: user.imageUrl ?? null,
       likes: user._count.likes,
       carts: user._count.carts,
     };

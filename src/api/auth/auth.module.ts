@@ -8,6 +8,8 @@ import { getJwtConfig } from '@/config/jwt.config';
 import { PrismaModule } from '@/services/prisma/prisma.module';
 import { RedisModule } from '@/services/redis/redis.module';
 import { JwtAuthGuard } from '@/common/guard';
+import { PassportModule } from '@nestjs/passport';
+import { GoogleStrategy } from './strategy/google.strategy';
 
 @Module({
   imports: [
@@ -16,12 +18,13 @@ import { JwtAuthGuard } from '@/common/guard';
       useFactory: getJwtConfig,
       inject: [ConfigService],
     }),
+    PassportModule.register({ session: false }),
     PrismaModule,
     RedisModule,
     ConfigModule,
     EmailModule,
   ],
-  providers: [AuthService, JwtAuthGuard],
+  providers: [AuthService, JwtAuthGuard, GoogleStrategy],
   controllers: [AuthController],
   exports: [AuthService, JwtAuthGuard, JwtModule],
 })

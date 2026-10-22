@@ -17,19 +17,20 @@ model User {
 
   firstname String
   lastname  String
-
-  email    String @unique
-  password String @map("password_hash")
+  email     String  @unique
+  imageUrl  String? @map("image_url")
+  password  String? @map("password_hash")
+  googleId  String? @unique @map("google_id")
 
   role Role @default(USER)
 
   likes     Like[]
   followers Follower[]
   orders    Order[]
+  carts     Cart[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  carts     Cart[]
 
   @@map("users")
 }
@@ -48,20 +49,20 @@ model Picture {
   paint    String
   type     String
 
-  price  Float
-  year   Int
-  isSold Boolean @default(false) @map("is_sold")
+  price Float
+  year  Int
 
-  sharesCount Int @default(0) @map("shares_count")
+  sharesCount Int     @default(0) @map("shares_count")
+  likes       Like[]
+  carts       Cart[]
+  orders      Order[]
+  isSold      Boolean @default(false) @map("is_sold")
 
-  likes    Like[]
-  orders   Order[]
-  author   Author  @relation(fields: [authorId], references: [id])
-  authorId String  @map("author_id")
+  author   Author @relation(fields: [authorId], references: [id])
+  authorId String @map("author_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-  carts     Cart[]
 
   @@map("pictures")
 }

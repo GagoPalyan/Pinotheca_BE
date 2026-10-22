@@ -1,11 +1,7 @@
 import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { Transform, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { MaterialEnum, PaintEnum, SortEnum, TypeEnum } from '../enums';
-
-const toOptionalArray = ({ value }: { value: unknown }) => {
-  if (value === undefined || value === null || value === '') return undefined;
-  return Array.isArray(value) ? value : [value];
-};
+import { ToOptionalArray } from '../decorators/optional-array.decorator';
 
 export class GetPictureQueryDto {
   @IsString()
@@ -22,19 +18,19 @@ export class GetPictureQueryDto {
   @IsOptional()
   limit?: number;
 
-  @IsOptional()
-  @Transform(toOptionalArray)
+  @ToOptionalArray()
   @IsEnum(MaterialEnum, { each: true })
+  @IsOptional()
   material?: MaterialEnum[];
 
-  @IsOptional()
-  @Transform(toOptionalArray)
+  @ToOptionalArray()
   @IsEnum(PaintEnum, { each: true })
+  @IsOptional()
   paint?: PaintEnum[];
 
-  @IsOptional()
-  @Transform(toOptionalArray)
+  @ToOptionalArray()
   @IsEnum(TypeEnum, { each: true })
+  @IsOptional()
   type?: TypeEnum[];
 
   @Type(() => Number)

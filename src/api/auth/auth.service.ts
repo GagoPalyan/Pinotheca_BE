@@ -7,7 +7,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { EmailService } from '@/common/email/email.service';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService, type JwtSignOptions } from '@nestjs/jwt';
 import { Request, Response } from 'express';
 import { isDev } from '@/utils/is-dev.utils';
 import { parseDuration } from '@/utils/parse-duration.utils';
@@ -16,6 +16,8 @@ import { PrismaService } from '@/services/prisma/prisma.service';
 import { I18nContext } from 'nestjs-i18n';
 import { IJwtPayload } from '@/common/interfaces';
 import { Role } from '@prisma/client';
+import { normalizeEmail } from '@/utils/normalize-email.utils';
+import type { GoogleProfile } from '../../types/google.types';
 
 @Injectable()
 export class AuthService {
@@ -38,8 +40,10 @@ export class AuthService {
   }
 
   async register(dto: RegisterEmailDto, i18n: I18nContext) {
+    const email = normalizeEmail(dto.email);
+
     const user = await this.PrismaService.user.findUnique({
-      where: { email: dto.email },
+      where: { email },
       select: { id: true },
     });
 
@@ -52,11 +56,11 @@ export class AuthService {
     const hashToken = crypto.createHash('sha256').update(token).digest('hex');
 
     const key = `magic_link:${hashToken}`;
-    await this.redis.set(key, dto.email, 'EX', 900);
+    await this.redis.set(key, email, 'EX', 900);
 
     const link = `${this.CLIENT_URL}/magic-link?token=${token}`;
 
-    this.emailService.sendMagicLinkEmail(dto.email, link);
+    this.emailService.sendMagicLinkEmail(email, link);
 
     return {
       message: i18n.t('backend.auth.register', { args: { email: dto.email } }),
@@ -87,8 +91,10 @@ export class AuthService {
   }
 
   async login(res: Response, dto: LoginDto, i18n: I18nContext) {
+    const email = normalizeEmail(dto.email);
+
     const user = await this.PrismaService.user.findUnique({
-      where: { email: dto.email },
+      where: { email },
       select: {
         id: true,
         password: true,
@@ -96,7 +102,7 @@ export class AuthService {
       },
     });
 
-    if (!user)
+    if (!user?.password)
       throw new UnauthorizedException(
         i18n.t('backend.auth.invalid_credentials', { args: { email: dto.email } }),
       );
@@ -111,9 +117,35 @@ export class AuthService {
     return this.auth(res, user.id, user.role);
   }
 
+  private async authGoogle(googleUser: GoogleProfile) {
+    const user = await this.PrismaService.user.create({
+      data: googleUser,
+      select: { id: true, role: true },
+    });
+
+    return user;
+  }
+
+  async google(googleUser: GoogleProfile, res: Response) {
+    const email = normalizeEmail(googleUser.email);
+
+    let user = await this.PrismaService.user.findUnique({
+      where: { email },
+      select: { id: true, role: true },
+    });
+
+    if (!user) user = await this.authGoogle(googleUser);
+
+    await this.auth(res, user.id, user.role);
+
+    return res.redirect(this.CLIENT_URL);
+  }
+
   async forgotPassword(dto: RegisterEmailDto, i18n: I18nContext) {
+    const email = normalizeEmail(dto.email);
+
     const user = await this.PrismaService.user.findUnique({
-      where: { email: dto.email },
+      where: { email },
       select: { id: true },
     });
 
@@ -191,12 +223,11 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException(i18n.t('backend.auth.unauthorized'));
 
+    const { _count, ...userInfo } = user;
+
     return {
-      email: user.email,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      likes: user._count.likes,
-      carts: user._count.carts,
+      ...userInfo,
+      ..._count,
     };
   }
 
@@ -226,15 +257,17 @@ export class AuthService {
     return { accessToken };
   }
 
+  private async buildToken(payload: IJwtPayload, expiresIn: string) {
+    return await this.jwtService.signAsync(payload, {
+      expiresIn: expiresIn as JwtSignOptions['expiresIn'],
+    });
+  }
+
   private async generateTokens(id: string, role: Role) {
     const payload: IJwtPayload = { id, role };
 
-    const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.JWT_ACCESS_TOKEN_TTL,
-    });
-    const refreshToken = await this.jwtService.signAsync(payload, {
-      expiresIn: this.JWT_REFRESH_TOKEN_TTL,
-    });
+    const accessToken = await this.buildToken(payload, this.JWT_ACCESS_TOKEN_TTL);
+    const refreshToken = await this.buildToken(payload, this.JWT_REFRESH_TOKEN_TTL);
 
     return { accessToken, refreshToken };
   }

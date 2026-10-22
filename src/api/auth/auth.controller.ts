@@ -2,8 +2,9 @@ import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { MagicLinkDto, RegisterEmailDto, LoginDto, ResetPasswordDto } from './dto';
-import { I18n, I18nContext } from 'nestjs-i18n';
-import { JwtAuthGuard } from '@/common/guard';
+import { I18n, type I18nContext } from 'nestjs-i18n';
+import { GoogleAuthGuard, JwtAuthGuard } from '@/common/guard';
+import type { GoogleProfile } from '@/types/google.types';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +22,16 @@ export class AuthController {
     @I18n() i18n: I18nContext,
   ) {
     return this.authService.magicLink(res, dto, i18n);
+  }
+
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  googleLogin() {}
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  googleCallback(@Req() req: Request, @Res() res: Response) {
+    return this.authService.google(req.user as GoogleProfile, res);
   }
 
   @Post('login')

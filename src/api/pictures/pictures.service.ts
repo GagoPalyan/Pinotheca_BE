@@ -48,7 +48,7 @@ export class PicturesService {
       sort = SortEnum.DESC,
     } = query;
     const skip = (page - 1) * limit;
-    const userId = req?.user?.id || '';
+    const userId = (req?.user as IJwtPayload)?.id || '';
 
     const dbCondition = userId
       ? {
@@ -119,7 +119,7 @@ export class PicturesService {
   }
 
   async findOne(id: string, req: ExpressRequest, i18n: I18nContext) {
-    const userId = req?.user?.id || '';
+    const userId = (req?.user as IJwtPayload)?.id || '';
 
     const dbCondition = userId
       ? {
@@ -220,10 +220,8 @@ export class PicturesService {
     this.userInfoGateway.updateUserLikeCount(userId, likesCount);
   }
 
-  async like(id: string, user: IJwtPayload, i18n: I18nContext) {
+  async like(id: string, userId: IJwtPayload['id'], i18n: I18nContext) {
     await this.findPictureById(id, i18n);
-
-    const userId = user.id;
 
     try {
       await this.prismaService.like.create({
@@ -259,10 +257,8 @@ export class PicturesService {
     this.userInfoGateway.updateUserCartCount(userId, cartCount);
   }
 
-  async cart(id: string, user: IJwtPayload, i18n: I18nContext) {
+  async cart(id: string, userId: IJwtPayload['id'], i18n: I18nContext) {
     await this.findPictureById(id, i18n);
-
-    const userId = user.id;
 
     try {
       await this.prismaService.cart.create({

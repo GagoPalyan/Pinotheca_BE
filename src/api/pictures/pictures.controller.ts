@@ -6,6 +6,7 @@ import { Role } from '@prisma/client';
 import { I18n, I18nContext } from 'nestjs-i18n';
 import { CreatePictureDto, GetPictureQueryDto } from './dto';
 import type { Request as ExpressRequest } from 'express';
+import type { IJwtPayload } from '@/common/interfaces';
 
 @Controller('pictures')
 export class PicturesController {
@@ -32,14 +33,18 @@ export class PicturesController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.USER)
   like(@Request() req: ExpressRequest, @Param('id') id: string, @I18n() i18n: I18nContext) {
-    return this.picturesService.like(id, req.user, i18n);
+    const userId = (req.user as IJwtPayload).id;
+
+    return this.picturesService.like(id, userId, i18n);
   }
 
   @Post(':id/cart')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.USER)
   cart(@Request() req: ExpressRequest, @Param('id') id: string, @I18n() i18n: I18nContext) {
-    return this.picturesService.cart(id, req.user, i18n);
+    const userId = (req.user as IJwtPayload).id;
+
+    return this.picturesService.cart(id, userId, i18n);
   }
 
   @Post(':id/share')

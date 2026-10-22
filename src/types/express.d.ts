@@ -1,4 +1,4 @@
-import type { IJwtPayload } from '../modules/auth/interfaces';
+import { IJwtPayload } from '@/common/interfaces';
 
 declare global {
   namespace Express {
