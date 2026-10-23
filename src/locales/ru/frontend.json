@@ -149,10 +149,8 @@
       "max": "До",
       "width": "Ширина",
       "height": "Высота",
-      "widthMin": "Ширина от",
-      "widthMax": "Ширина до",
-      "heightMin": "Высота от",
-      "heightMax": "Высота до",
+      "minValue": "От {value}",
+      "maxValue": "До {value}",
       "chip": {
         "price": "Цена: {min}–{max}",
         "priceMin": "Цена: от {value}",

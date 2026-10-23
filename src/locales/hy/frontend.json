@@ -149,10 +149,8 @@
       "max": "Մաքս",
       "width": "Լայնություն",
       "height": "Բարձրություն",
-      "widthMin": "Լայնություն մին",
-      "widthMax": "Լայնություն մաքս",
-      "heightMin": "Բարձրություն մին",
-      "heightMax": "Բարձրություն մաքս",
+      "minValue": "Մին {value}",
+      "maxValue": "Մաքս {value}",
       "chip": {
         "price": "Գին: {min}–{max}",
         "priceMin": "Գին: մին {value}",

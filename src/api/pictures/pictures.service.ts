@@ -72,7 +72,7 @@ export class PicturesService {
       ...checkRangeFilter('height', heightMin, heightMax),
     };
 
-    const [pictures, total, priceBounds] = await Promise.all([
+    const [pictures, total, bounds] = await Promise.all([
       this.prismaService.picture.findMany({
         where,
         take: limit,
@@ -93,8 +93,9 @@ export class PicturesService {
       }),
       this.prismaService.picture.count({ where }),
       this.prismaService.picture.aggregate({
-        _min: { price: true },
-        _max: { price: true },
+        where,
+        _min: { price: true, width: true, height: true },
+        _max: { price: true, width: true, height: true },
       }),
     ]);
 
@@ -112,8 +113,11 @@ export class PicturesService {
         page,
         limit,
         totalPages,
-        minPrice: priceBounds._min.price ?? 0,
-        maxPrice: priceBounds._max.price ?? 0,
+      },
+      filters: {
+        price: { min: bounds._min.price, max: bounds._max.price },
+        width: { min: bounds._min.width, max: bounds._max.width },
+        height: { min: bounds._min.height, max: bounds._max.height },
       },
     };
   }

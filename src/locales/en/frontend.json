@@ -149,10 +149,8 @@
       "max": "Max",
       "width": "Width",
       "height": "Height",
-      "widthMin": "Width min",
-      "widthMax": "Width max",
-      "heightMin": "Height min",
-      "heightMax": "Height max",
+      "minValue": "Min {value}",
+      "maxValue": "Max {value}",
       "chip": {
         "price": "Price: {min}–{max}",
         "priceMin": "Price: min {value}",
