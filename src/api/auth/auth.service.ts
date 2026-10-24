@@ -231,7 +231,7 @@ export class AuthService {
     };
   }
 
-  async logout(res: Response) {
+  logout(res: Response) {
     const cookiesList = ['accessToken', 'refreshToken'] as const;
     cookiesList.forEach((cookie) => this.setCookie(res, cookie, '', new Date(0)));
     return;
